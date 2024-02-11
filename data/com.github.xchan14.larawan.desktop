@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+
+Name=Larawan
+Comment=Slideshow app for elementary OS
+Categories=Graphics;Amusement;
+
+Icon=larawan
+Exec=com.github.xchan14.larawan
+Terminal=false
