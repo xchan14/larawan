@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>com.github.xchan14.larawan</id>
+  <id>io.github.xchan14.larawan</id>
   
   <name>Larawan</name>
   <summary>Slideshow app for elementary OS</summary>
@@ -14,5 +14,5 @@
     </p>
   </description>
   
-  <launchable type="desktop-id">com.github.xchan14.larawan.desktop</launchable>
+  <launchable type="desktop-id">io.github.xchan14.larawan.desktop</launchable>
 </component>

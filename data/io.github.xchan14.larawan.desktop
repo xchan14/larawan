@@ -7,5 +7,5 @@ Comment=Slideshow app for elementary OS
 Categories=Graphics;Amusement;
 
 Icon=larawan
-Exec=com.github.xchan14.larawan
+Exec=io.github.xchan14.larawan
 Terminal=false
