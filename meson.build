@@ -5,8 +5,11 @@ project('io.github.xchan14.larawan', 'vala', 'c')
 executable(
     meson.project_name(),
     'src' / 'Application.vala',
+    'src' / 'Views' / 'MainWindow.vala',
     dependencies: [
-        dependency('gtk4')
+        dependency('gtk4'),
+        # dependency('granite-7'),
+        dependency('libadwaita-1')
     ],
     install: true
 )
