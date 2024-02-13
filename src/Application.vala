@@ -3,6 +3,7 @@
  * SPDX-FileCopyrightText: 2023 Your Name <chancamilon@proton.me>
  */
  using Gtk;
+ using GLib;
  using Larawan.Views;
  
  public class Larawan.Application : Gtk.Application {
@@ -24,7 +25,8 @@
   }
 
   public static int main (string[] args) {
-      return new Larawan.Application ().run (args);
+    var app = new Larawan.Application ();
+    return app.run (args);
   }
     
 }
