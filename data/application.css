@@ -1,0 +1,13 @@
+
+.settings-button {
+  background-color: transparent;
+  opacity: .5;
+  outline: none;
+  box-shadow: none;
+}
+
+  .settings-button:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+

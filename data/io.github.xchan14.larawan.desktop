@@ -9,3 +9,8 @@ Categories=Graphics;Amusement;
 # Icon=io.github.xchan14.larawan
 Exec=io.github.xchan14.larawan
 Terminal=false
+Actions=Settings
+
+[Desktop Action Settings]
+Name=Settings
+Exec=io.github.xchan14.larawan

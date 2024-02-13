@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2024 Christian Camilon <chancamilon@proton.me> -->
+<gresources>
+  <gresource prefix="/io/github/xchan14/larawan">
+    <file alias="application.css" compressed="true">application.css</file>
+  </gresource>
+</gresources>
