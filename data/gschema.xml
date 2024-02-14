@@ -2,7 +2,8 @@
 <schemalist>
   <schema path="/io/github/xchan14/larawan/" id="io.github.xchan14.larawan">
     <key name="album-folder" type="s">
-      <default>/home/xchan/pCloud/Photos/Family/Katniss Eve</default>
+      <!-- <default>/home/xchan/pCloud/Photos/Family/Katniss Eve</default> -->
+      <default>test</default>
       <summary>Album Folder</summary>
       <description>Folder path of album to show in slide show</description>
     </key>

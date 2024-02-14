@@ -19,6 +19,9 @@ finish-args:
   - '--share=ipc'
   - '--socket=fallback-x11'
   - '--socket=wayland'
+  - '--filesystem=home:ro'
+  - '--filesystem=host'
+  # - '--env="GSETTINGS_SCHEMA_DIR=/app/share/glib-2.0/schemas"'
 
 # This section is where you list all the source code required to build your app.
 # If we had external dependencies that weren't included in our SDK, we would list
@@ -26,6 +29,9 @@ finish-args:
 modules:
   - name: larawan
     buildsystem: meson
+    # build-options:
+    #   env:
+    #     GSETTINGS_SCHEMA_DIR: /app/share/glib-2.0/schemas
     sources:
       - type: dir
         path: .

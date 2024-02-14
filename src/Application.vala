@@ -15,6 +15,20 @@
     );
   }
 
+  static GLib.Settings settings;
+
+  construct {
+    //  string path = Environment.get_user_data_dir () + "/glib-2.0/schemas/" + "io.github.xchan14.larawan.gschema.xml";
+    //  debug(path);
+    try {
+      //  settings = new GLib.Settings(application_id);
+      //  settings = new GLib.Settings(Larawan.Constants.APP_ID);
+      debug(settings.get_string("album-folder"));
+    } catch(Error e) {
+      error(e.message);
+    }
+  }
+
   protected override void activate () {
     // Call the parent class's activate method
     base.activate();

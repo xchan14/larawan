@@ -8,10 +8,6 @@ using GLib;
 
 public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
 
-  const int double_click_time = 150;
-  long click1 = 0;  
-  long click2 = 0;
-
   Stack picture_stack;
   int stack_position = 0;
   Array<string> filenames;
@@ -23,9 +19,9 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
 
   construct {
     //  var directory_path = "/home/xchan/pCloud/Photos/Wallpaper/Desktop";
-    //  var directory_path = "/home/xchan/pCloud/Photos/Family/Katniss Eve";
-    var settings = new GLib.Settings(Constants.APP_ID);
-    var directory_path = settings.get_string("album-folder");
+    var directory_path = "/home/xchan/pCloud/Photos/Family/Katniss Eve";
+    //  var settings = new GLib.Settings(APP_ID);
+    //  var directory_path = settings.get_string("album-folder");
 
     // Create a new Dir object for the directory
     stdout.printf("Directory: %s", directory_path);
@@ -101,10 +97,10 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
     content = overlay;
     //  child = overlay;
 
-    show_next_pic();
+    show_next_pic ();
 
-    Timeout.add_seconds(7, () => {
-      show_next_pic();
+    Timeout.add_seconds (7, () => {
+      show_next_pic ();
       return true;
     }, Priority.DEFAULT);
   }

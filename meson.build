@@ -15,7 +15,6 @@ executable(
     meson.project_name(),
     asresources,
     'src' / 'Application.vala',
-    'src' / 'Constants.vala',
     'src' / 'Views' / 'MainWindow.vala',
     'src' / 'Views' / 'SettingsDialog.vala',
     dependencies: [
@@ -40,10 +39,5 @@ install_data(
     rename: meson.project_name() + '.metainfo.xml'
 )
 
-install_data (
-    'data' / meson.project_name() + '.gschema.xml',
-    install_dir: get_option('datadir') / 'glib-2.0' / 'schemas',
-    rename: meson.project_name() + '.gschema.xml'
-)
-
 gnome.post_install(glib_compile_schemas: true)
+subdir('data')

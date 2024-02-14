@@ -7,6 +7,7 @@ using Granite;
 
 public class Larawan.Views.SettingsDialog : Granite.Dialog {
   public ApplicationWindow window { get; construct set; }
+  private string selected_folder;
 
   public SettingsDialog(ApplicationWindow window) {
     Object(window: window);
@@ -21,11 +22,11 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
     var folder_box = new Box (Orientation.HORIZONTAL, 5);
     var folder_label = new Label("Album Folder: ");
     var folder_select_button = new Button.with_label("Choose Album");
-    var settings = new GLib.Settings(Constants.APP_ID);
-    var file_dialog = new FileDialog();
-    settings.bind("album-folder", file_dialog, "active", SettingsBindFlags.DEFAULT);
+    //  var settings = new GLib.Settings(Constants.APP_ID);
+    //  var file_dialog = new FileDialog();
+    //  settings.bind("album-folder", file_dialog, "active", SettingsBindFlags.DEFAULT);
     folder_select_button.clicked.connect(() => {
-      file_dialog.select_folder(window, null);
+      //  file_dialog.select_folder(window, null);
     });
     folder_box.append(folder_label);
     folder_box.append(folder_select_button);
