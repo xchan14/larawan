@@ -5,6 +5,7 @@
 using Gtk;
 using Gdk;
 using GLib;
+using Larawan.Constants;
 
 public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
 
@@ -12,67 +13,25 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
   int stack_position = 0;
   Array<string> filenames;
   SettingsDialog settings_dialog;
+  GLib.Settings settings;
+  WindowHandle window_handle;
 
   public MainWindow(Larawan.Application larawan){
       Object(application: larawan);
   }
 
   construct {
-    //  var directory_path = "/home/xchan/pCloud/Photos/Wallpaper/Desktop";
-    var directory_path = "/home/xchan/pCloud/Photos/Family/Katniss Eve";
-    //  var settings = new GLib.Settings(APP_ID);
-    //  var directory_path = settings.get_string("album-folder");
+    resizable = false;
+    settings = new GLib.Settings(APP_ID);
+    string album_path = settings.get_string("album-folder");
 
-    // Create a new Dir object for the directory
-    stdout.printf("Directory: %s", directory_path);
-    Dir directory = Dir.open(directory_path);
-    if (directory == null) {
-        stderr.printf("Failed to open directory: %s\n", directory_path);
-        return;
-    }
+    load_album (album_path);
 
-    picture_stack = new Stack () {
-      transition_type = StackTransitionType.CROSSFADE,
-      transition_duration = 1500,
-    };
-
-    // Read filenames from the directory
-    filenames = new Array<string> ();
-    string filename;
-    while ((filename = directory.read_name()) != null) {
-      // Print each filename
-      string full_path = directory_path + "/" + filename;
-      if(!is_image_file(full_path)) {
-        continue;
-      }
-
-      // Set the desired width and height for the picture
-      int width = 360;
-      int height = 240;
-
-      // Load an image file
-      var pixbuf = new Pixbuf.from_file(full_path);
-      // Resize the image
-      pixbuf = pixbuf.scale_simple(width, height, InterpType.BILINEAR);
-
-      var image_texture = Texture.for_pixbuf(pixbuf);
-
-      var picture = new Picture() {
-        can_shrink = true,
-        hexpand = true,
-        vexpand = true,
-        content_fit = ContentFit.COVER,
-      };
-      picture.set_paintable(image_texture);
-      picture_stack.add_named (picture, filename);
-      filenames.append_val(filename);
-    }
-
-    var window_handle = new WindowHandle () {
+    window_handle = new WindowHandle () {
       child = picture_stack,
       hexpand = true,
       vexpand = true,
-   };
+    };
 
     var settings_button = new Button.with_label("⚙️") {
       halign = Align.END,
@@ -84,9 +43,6 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
       settings_dialog = new SettingsDialog(this);
       settings_dialog.show();
     });
-    //  var gclick = new GestureClick();
-    //  gclick.pressed.connect(() => stdout.printf("test..."));
-    //  settings_button.add_controller(gclick);
 
     var overlay = new Overlay() {
       child = window_handle,
@@ -99,10 +55,90 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
 
     show_next_pic ();
 
+    //  settings.changed.connect((key) => {
+    //    if(key == "album-folder") {
+    //      var new_album_path = settings.get_string("album-folder");
+    //      load_album(new_album_path);
+    //    }
+    //  });
+
     Timeout.add_seconds (7, () => {
       show_next_pic ();
       return true;
     }, Priority.DEFAULT);
+
+  }
+
+  private void load_album(string path) {
+    Dir directory = null;
+
+    // Create a new Dir object for the directory
+    string album_path = path;
+    filenames = new Array<string>();
+
+    // If selected folder can't be opened,
+    // Reset to Home's pictures folder of user.
+    try {
+      directory = Dir.open(album_path);
+    } catch (FileError e) {
+      album_path = Environment.get_home_dir() + "/Pictures";
+      settings.set_string("album-folder", album_path);
+    }
+
+    // Remove existing picture stack contents
+    while(picture_stack?.get_visible_child() != null) {
+      var child = picture_stack.get_visible_child();
+      picture_stack.remove(child);
+      child.destroy();
+    }
+    picture_stack.destroy();
+
+    // Create new picture stack
+    picture_stack = new Stack () {
+      transition_type = StackTransitionType.CROSSFADE,
+      transition_duration = 1500,
+    };
+
+    // Read filenames from the directory
+    filenames = new Array<string> ();
+    string filename;
+    while ((filename = directory.read_name()) != null) {
+      // Print each filename
+      string full_path = album_path + "/" + filename;
+      if(!is_image_file(full_path)) {
+        continue;
+      }
+
+      // Set the desired width and height for the picture
+      int width = 360;
+      int height = 240;
+
+      Pixbuf pixbuf = null;
+      try{
+        // Load an image file
+        pixbuf = new Pixbuf.from_file(full_path);
+      } catch(Error e) {
+        info("Unable to load file: %s", full_path);
+        info("Error: %s", e.message);
+        continue;
+      }
+
+      // Resize the image
+      pixbuf = pixbuf.scale_simple(width, height, InterpType.BILINEAR);
+
+      var image_texture = Texture.for_pixbuf(pixbuf);
+
+      var picture = new Picture() {
+        //  can_shrink = true,
+        hexpand = true,
+        vexpand = true,
+        content_fit = ContentFit.COVER,
+      };
+      picture.add_css_class("image");
+      picture.set_paintable(image_texture);
+      picture_stack.add_named (picture, filename);
+      filenames.append_val(filename);
+    }
   }
 
   private void show_next_pic() {
@@ -131,4 +167,5 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
     int index = path.last_index_of_char('.');
     return path.substring(index + 1);
   }
+
 }

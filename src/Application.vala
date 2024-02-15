@@ -6,24 +6,23 @@
  using Gdk;
  using GLib;
  using Larawan.Views;
+ using Larawan.Constants;
  
  public class Larawan.Application : Gtk.Application {
   public Application () {
     Object (
-        application_id: "io.github.xchan14.larawan",
+        application_id: APP_ID,
         flags: ApplicationFlags.FLAGS_NONE
     );
   }
 
-  static GLib.Settings settings;
-
   construct {
     //  string path = Environment.get_user_data_dir () + "/glib-2.0/schemas/" + "io.github.xchan14.larawan.gschema.xml";
-    //  debug(path);
     try {
       //  settings = new GLib.Settings(application_id);
       //  settings = new GLib.Settings(Larawan.Constants.APP_ID);
-      debug(settings.get_string("album-folder"));
+    var settings = new GLib.Settings (application_id);
+    //    debug(settings.get_string("album-folder"));
     } catch(Error e) {
       error(e.message);
     }
@@ -39,7 +38,6 @@
     stdout.printf("Starting Larawan...");
     var main_window = new MainWindow(this);
 
-    var style_context = main_window.get_style_context();
     var css_provider = new CssProvider();
     css_provider.load_from_resource("io/github/xchan14/larawan/application.css");
 

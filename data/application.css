@@ -1,3 +1,8 @@
+.image {
+  min-width: 240px;
+  min-height: 180px;
+}
+
 
 .settings-button {
   background-color: transparent;

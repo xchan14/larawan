@@ -15,6 +15,7 @@ executable(
     meson.project_name(),
     asresources,
     'src' / 'Application.vala',
+    'src' / 'Constants.vala',
     'src' / 'Views' / 'MainWindow.vala',
     'src' / 'Views' / 'SettingsDialog.vala',
     dependencies: [
