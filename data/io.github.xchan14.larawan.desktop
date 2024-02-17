@@ -6,7 +6,7 @@ Name=Larawan
 Comment=Slideshow app for elementary OS
 Categories=Graphics;Amusement;
 
-# Icon=io.github.xchan14.larawan
+Icon=io.github.xchan14.larawan
 Exec=io.github.xchan14.larawan
 Terminal=false
 # Actions=Settings
