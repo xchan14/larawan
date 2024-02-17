@@ -11,13 +11,13 @@ using Larawan.Models;
 
 public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
 
-    ArrayQueue<SlideshowImage> images_to_show;
+    ArrayList<SlideshowImage> images_to_show;
     ArrayQueue<SlideshowImage> shown_images;
     SlideshowImage current_image;
     int picture_duration = 1;
     uint picture_timeout_id = -1;
-    int window_width = 300;
-    int window_height = 300;
+    int window_width;
+    int window_height;
 
     Stack picture_stack;
     SettingsDialog settings_dialog;
@@ -35,10 +35,13 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
         resizable = false;
         settings = new GLib.Settings (APP_ID);
         picture_duration = settings.get_int ("duration");
+        window_width = settings.get_int ("width");
+        window_height = settings.get_int ("height");
+        info ("Window size: %ix%i", window_width, window_height);
 
         picture_stack = new Stack () {
-            transition_type = StackTransitionType.CROSSFADE,
-            transition_duration = 1000,
+            transition_type = StackTransitionType.SLIDE_LEFT_RIGHT,
+            transition_duration = 750,
             vexpand = true,
         };
 
@@ -59,7 +62,7 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
         window_handle = new WindowHandle () {
             child = scrolled_window,
         };
-        window_handle.set_size_request (window_width, window_height);
+        // window_handle.set_size_request (window_width, window_height);
 
         settings_button = new Button.with_label ("⚙️") {
             halign = Align.END,
@@ -82,27 +85,17 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
 
         settings.changed.connect (on_settings_changed);
         map.connect (on_map);
-        activate_focus.connect (on_activate_focus);
-        move_focus.connect (on_move_focus);
     }
 
     private void on_map () {
-        load_album ();
-        play_slideshow ();
-        show_next ();
-    }
-
-    private void on_activate_focus () {
-        settings_button.visible = true;
-    }
-
-    private void on_move_focus () {
-        settings_button.visible = false;
+        load_image_files ();
+        start_slideshow ();
     }
 
     private void on_settings_changed (string key) {
         if (key == "album-folder") {
-            load_album ();
+            load_image_files ();
+            start_slideshow ();
         }
 
         if (key == "duration") {
@@ -112,6 +105,10 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
         if (key == "width" || key == "height") {
             resize_window ();
         }
+
+        if (key == "shuffle") {
+            reset_slides ();
+        }
     }
 
     private void on_settings_button_clicked () {
@@ -119,46 +116,40 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
         settings_dialog.show ();
     }
 
-    private void play_slideshow () {
+    private void start_slideshow () {
         info ("Playing slideshow...");
-
-        // If images to show isn't greater than 1.
-        // no need to create interval.
-        if (images_to_show.size <= 1) {
-            info ("There are only %i images to show.", images_to_show.size);
-            return;
-        }
-
-        picture_timeout_id = Timeout.add_seconds (picture_duration, () => {
-            info ("Pic duration: %i", picture_duration);
-            show_next ();
-            return true;
-        }, Priority.DEFAULT);
+        show_next ();
+        play ();
     }
 
-    private void reset_slideshow () {
-        info ("Resetting slide show.");
-        if (images_to_show.peek () == null) {
-            images_to_show.add_all (shown_images);
-            current_image = null;
-            shown_images.clear ();
+    private void stop_slideshow () {
+        if (picture_timeout_id > 0) {
+            Source.remove (picture_timeout_id);
         }
-        play_slideshow ();
+    }
+
+    private void reset_slides () {
+        info ("Resetting slide show.");
+        images_to_show.add_all (shown_images);
+        sort_images ();
+        shown_images.clear ();
     }
 
     private void reset_duration () {
-        if (picture_timeout_id > 0) {
-            Source.remove (picture_timeout_id);
-            picture_timeout_id = -1;
-            info ("Interval reset!");
-        }
+        stop ();
         picture_duration = settings.get_int ("duration");
-        play_slideshow ();
+        play ();
     }
 
-    private void load_album () {
+    private void sort_images () {
+        images_to_show.order_by ((image1, image2) => image1.filename >= image2.filename ? 1 : -1);
+    }
+
+    private void load_image_files () {
         string album_path = settings.get_string ("album-folder");
         info ("Loading album.");
+
+        stop_slideshow ();
 
         Dir directory = null;
 
@@ -173,14 +164,9 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
         }
 
         info ("Removing current album pictures in picture stack.");
-        while (picture_stack ? .get_visible_child () != null) {
-            Widget child = picture_stack.get_visible_child ();
-            picture_stack.remove (child);
-            child.destroy ();
-        }
 
         // Reset slideshow image items
-        images_to_show = new ArrayQueue<SlideshowImage>();
+        images_to_show = new ArrayList<SlideshowImage>();
         shown_images = new ArrayQueue<SlideshowImage>();
 
         // Read filenames from the directory
@@ -195,35 +181,42 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
 
             // Add file to show in list of images
             // if found to be an image file.
-            images_to_show.offer (slideshow_image);
+            images_to_show.add (slideshow_image);
             picture_stack.add_named (slideshow_image.picture, filename);
             info ("Added %s in pic stack", slideshow_image.filename);
         }
 
-        debug ("Appended main_content with picture_stack");
+        sort_images ();
+
         info ("Done creating picture stack");
     }
 
     private void show_next () {
         info ("Showing next picture.");
 
-        debug (" Adding current image to shown_images list.");
+        debug ("Adding current image to shown_images list.");
         if (current_image != null) {
             shown_images.offer (current_image);
             current_image.unload_picture ();
         }
 
-        current_image = images_to_show.poll ();
-        if (current_image == null) {
-            reset_slideshow ();
-            return;
-        }
+        bool shuffle = settings.get_boolean ("shuffle");
+
+        current_image = shuffle
+            ? get_next_random_image ()
+            : images_to_show.remove_at (0);
         debug ("Current image: %s", current_image.filename);
 
         reload_image ();
         picture_stack.set_visible_child_name (current_image.filename);
 
         info ("Current picture set.");
+    }
+
+    private SlideshowImage get_next_random_image () {
+        var rand = new Rand ();
+        int index = rand.int_range (0, images_to_show.size);
+        return images_to_show.remove_at (index);
     }
 
     void resize_window () {
@@ -234,5 +227,24 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
 
     void reload_image () {
         current_image.load_picture (width_request, height_request);
+    }
+
+    private void play () {
+        picture_timeout_id = Timeout.add_seconds (picture_duration, () => {
+            info ("Pic duration: %i", picture_duration);
+            show_next ();
+            if (images_to_show.size == 0) {
+                reset_slides ();
+            }
+            return true;
+        }, Priority.DEFAULT);
+    }
+
+    private void stop () {
+        if (picture_timeout_id > 0) {
+            Source.remove (picture_timeout_id);
+            picture_timeout_id = -1;
+            info ("Interval reset!");
+        }
     }
 }

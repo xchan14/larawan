@@ -6,6 +6,11 @@
       <summary>Album Path</summary>
       <description>Album Path</description>
     </key>
+    <key name="shuffle" type="b">
+      <default>false</default>
+      <summary>Shuffle</summary>
+      <description>Shuffles the images to be shown next</description>
+    </key>
     <key name="duration" type="i">
       <default>5</default>
       <summary>Duration</summary>

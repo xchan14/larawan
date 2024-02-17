@@ -1,12 +1,14 @@
 
-.settings-button {
+.settings-button,
+.resize-button {
   background-color: transparent;
   opacity: .5;
   outline: none;
   box-shadow: none;
 }
 
-  .settings-button:focus-visible {
+  .settings-button:focus-visible,
+  .resize-button:focus-visible {
     outline: none;
     box-shadow: none;
   }
@@ -29,4 +31,3 @@
   border-bottom-left-radius: 0;
   box-shadow: none;
 }
-

@@ -11,6 +11,8 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
 
     EntryButton album_folder = null;
     Adjustment adjustment = null;
+    Switch shuffle_switch = null;
+    GLib.Settings settings;
 
     public ApplicationWindow window { get; construct set; }
 
@@ -24,7 +26,7 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         add_css_class ("settings-dialog");
         resizable = false;
 
-        var settings = new GLib.Settings (APP_ID);
+        settings = new GLib.Settings (APP_ID);
         var box = new Box (Orientation.VERTICAL, 10);
 
         // Album folder
@@ -60,13 +62,43 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         box.append (folder_label);
         box.append (album_folder);
 
+        // Shuffle
+        var shuffle_label = new Label ("Shuffle") {
+            xalign = 0.0f
+        };
+        shuffle_label.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
+
+        shuffle_switch = new Switch () {
+            hexpand = false
+        };
+
+        settings.bind (
+            "shuffle",
+            shuffle_switch,
+            "active",
+            SettingsBindFlags.DEFAULT);
+
+        var shuffle_box = new Box (Orientation.HORIZONTAL, 0);
+        var shuffle_desc = new Label ("Shuffles images to be displayed.") {
+            hexpand = true,
+            xalign = 0.0f,
+            yalign = 0.0f
+        };
+        shuffle_desc.add_css_class (Granite.STYLE_CLASS_H3_LABEL);
+        shuffle_desc.add_css_class ("shuffle-desc");
+        shuffle_box.append (shuffle_desc);
+        shuffle_box.append (shuffle_switch);
+
+        box.append (shuffle_label);
+        box.append (shuffle_box);
+
         // Duration
         var duration_label = new Label ("Duration") {
             xalign = 0.0f
         };
         duration_label.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
 
-        var duration_scale = new Scale.with_range (Orientation.HORIZONTAL, 2, 60, 1) {
+        var duration_scale = new Scale.with_range (Orientation.HORIZONTAL, 1, 60, 1) {
             digits = 0,
             draw_value = true,
             hexpand = true,
