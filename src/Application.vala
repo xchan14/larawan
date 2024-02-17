@@ -21,6 +21,7 @@
     base.activate();
 
     Granite.init();
+    apply_granite_theme();
 
     // Create a new window
     info("Starting Larawan...");
@@ -40,6 +41,21 @@
   public static int main (string[] args) {
     var app = new Larawan.Application ();
     return app.run (args);
+  }
+
+  private void apply_granite_theme() {
+    // First we get the default instances for Granite.Settings and Gtk.Settings
+    var granite_settings = Granite.Settings.get_default ();
+    var gtk_settings = Gtk.Settings.get_default ();
+
+    // Then, we check if the user's preference is for the dark style and set it if it is
+    gtk_settings.gtk_application_prefer_dark_theme = granite_settings.prefers_color_scheme == Granite.Settings.ColorScheme.DARK;
+
+    // Finally, we listen to changes in Granite.Settings and update our app if the user changes their preference
+    granite_settings.notify["prefers-color-scheme"].connect (() => {
+        gtk_settings.gtk_application_prefer_dark_theme = granite_settings.prefers_color_scheme == Granite.Settings.ColorScheme.DARK;
+    });
+
   }
     
 }
