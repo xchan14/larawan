@@ -16,18 +16,6 @@
     );
   }
 
-  construct {
-    //  string path = Environment.get_user_data_dir () + "/glib-2.0/schemas/" + "io.github.xchan14.larawan.gschema.xml";
-    try {
-      //  settings = new GLib.Settings(application_id);
-      //  settings = new GLib.Settings(Larawan.Constants.APP_ID);
-    var settings = new GLib.Settings (application_id);
-    //    debug(settings.get_string("album-folder"));
-    } catch(Error e) {
-      error(e.message);
-    }
-  }
-
   protected override void activate () {
     // Call the parent class's activate method
     base.activate();
@@ -35,7 +23,7 @@
     Granite.init();
 
     // Create a new window
-    stdout.printf("Starting Larawan...");
+    info("Starting Larawan...");
     var main_window = new MainWindow(this);
 
     var css_provider = new CssProvider();
@@ -51,7 +39,6 @@
 
   public static int main (string[] args) {
     var app = new Larawan.Application ();
-
     return app.run (args);
   }
     

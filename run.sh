@@ -1,1 +1,1 @@
-G_DEBUG_MESSAGES=all io.github.xchan14.larawan
+G_MESSAGES_DEBUG=all io.github.xchan14.larawan

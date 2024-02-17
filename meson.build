@@ -16,13 +16,18 @@ executable(
     asresources,
     'src' / 'Application.vala',
     'src' / 'Constants.vala',
-    'src' / 'Views' / 'MainWindow.vala',
-    'src' / 'Views' / 'SettingsDialog.vala',
+    'src' / 'widgets' / 'EntryButton.vala',
+    'src' / 'widgets' / 'Slider.vala',
+    'src' / 'views' / 'MainWindow.vala',
+    'src' / 'views' / 'SettingsDialog.vala',
+    'src' / 'models' / 'SlideshowImage.vala',
     dependencies: [
+        dependency('glib-2.0', version: '>=2.70'),
         dependency('gtk4'),
         dependency('granite-7'),
         dependency('libadwaita-1')
     ],
+    link_args : ['-lm',],
     install: true
 )
 
