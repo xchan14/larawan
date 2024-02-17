@@ -3,21 +3,20 @@ project('io.github.xchan14.larawan', 'vala', 'c')
 
 gnome = import('gnome')
 
-asresources = gnome.compile_resources(
-    'as-resources', 
-    'data' / meson.project_name() + '.gresource.xml',
-    source_dir: 'data',
-    c_name: 'as'
-)
+# asresources = gnome.compile_resources(
+#     'as-resources', 
+#     'data' / meson.project_name() + '.gresource.xml',
+#     source_dir: 'data',
+#     c_name: 'as'
+# )
 
 # Create a new executable, list the files we want to compile, list the dependencies we need, and install
 executable(
     meson.project_name(),
-    asresources,
+    # asresources,
     'src' / 'Application.vala',
     'src' / 'Constants.vala',
     'src' / 'widgets' / 'EntryButton.vala',
-    'src' / 'widgets' / 'Slider.vala',
     'src' / 'views' / 'MainWindow.vala',
     'src' / 'views' / 'SettingsDialog.vala',
     'src' / 'models' / 'SlideshowImage.vala',

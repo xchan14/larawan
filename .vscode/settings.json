@@ -1,4 +1,6 @@
 {
-  "editor.tabSize": 2,
-  "uncrustify.configPath.linux": "uncrustify.vala.cfg"
+  "editor.tabSize": 4,
+  "uncrustify.configPath.linux": "uncrustify.cfg",
+  "editor.formatOnSave": true,
+  "mesonbuild.configureOnOpen": "ask"
 }
