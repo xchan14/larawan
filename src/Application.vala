@@ -8,8 +8,8 @@ using GLib;
 using Larawan.Views;
 using Larawan.Constants;
 
-public class Larawan.Application : Gtk.Application {
-    public Application () {
+public class Larawan.App : Gtk.Application {
+    public App () {
         Object (
             application_id: APP_ID,
             flags : ApplicationFlags.FLAGS_NONE
@@ -39,7 +39,7 @@ public class Larawan.Application : Gtk.Application {
     }
 
     public static int main (string[] args) {
-        var app = new Larawan.Application ();
+        var app = new Larawan.App ();
         return app.run (args);
     }
 

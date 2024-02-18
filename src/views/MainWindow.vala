@@ -6,18 +6,13 @@ using Gtk;
 using Gdk;
 using Gee;
 using GLib;
+using Granite;
 using Larawan.Constants;
 using Larawan.Models;
 
 public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
 
-    ArrayList<SlideshowImage> images_to_show;
-    ArrayQueue<SlideshowImage> shown_images;
-    SlideshowImage current_image;
-    int picture_duration = 1;
-    uint picture_timeout_id = -1;
-    int window_width;
-    int window_height;
+    SlideshowPlaylist slideshow_playlist;
 
     Stack picture_stack;
     SettingsDialog settings_dialog;
@@ -25,19 +20,19 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
     WindowHandle window_handle;
     ScrolledWindow scrolled_window;
     Button settings_button;
-    Box main_content;
+    Stack main_content;
+    Placeholder empty_dir_placeholder;
+    Button empty_dir_placeholder_button;
 
-    public MainWindow (Larawan.Application larawan) {
+    public MainWindow (Larawan.App larawan) {
         Object (application: larawan);
     }
 
     construct {
         resizable = false;
+        slideshow_playlist = new SlideshowPlaylist ();
         settings = new GLib.Settings (APP_ID);
-        picture_duration = settings.get_int ("duration");
-        window_width = settings.get_int ("width");
-        window_height = settings.get_int ("height");
-        info ("Window size: %ix%i", window_width, window_height);
+        settings.set_string ("album-folder", "/home/xchan/pCloud/Photos/Wallpaper/Desktop");
 
         picture_stack = new Stack () {
             transition_type = StackTransitionType.SLIDE_LEFT_RIGHT,
@@ -45,24 +40,38 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
             vexpand = true,
         };
 
-        main_content = new Box (Orientation.VERTICAL, 0);
-        main_content.append (picture_stack);
+        empty_dir_placeholder = new Placeholder ("So Empty!") {
+            description = "Display album of your choice like your special someone or pets for example.",
+            hexpand = true
+        };
+        empty_dir_placeholder_button = empty_dir_placeholder.append_button (
+            new ThemedIcon ("folder-open"),
+            "Select Album",
+            "Adds picture from selected album folder and subdirectory."
+        );
+
+        var loading_album = new Label ("Loading Album...");
+        loading_album.add_css_class (Granite.STYLE_CLASS_H1_LABEL);
+
+        main_content = new Stack ();
+        main_content.add_named (picture_stack, "picture_stack");
+        main_content.add_named (empty_dir_placeholder, "empty_dir");
+        main_content.add_named (loading_album, "loading");
 
         scrolled_window = new ScrolledWindow () {
             child = main_content,
             propagate_natural_width = false,
             has_frame = false,
-            max_content_width = window_width,
-            vscrollbar_policy = PolicyType.NEVER
+            vscrollbar_policy = PolicyType.NEVER,
+            hscrollbar_policy = PolicyType.NEVER,
         };
         var viewport = (Viewport) scrolled_window.child;
         viewport.vscroll_policy = ScrollablePolicy.MINIMUM;
-        viewport.width_request = window_width;
+        viewport.hscroll_policy = ScrollablePolicy.MINIMUM;
 
         window_handle = new WindowHandle () {
             child = scrolled_window,
         };
-        // window_handle.set_size_request (window_width, window_height);
 
         settings_button = new Button.with_label ("⚙️") {
             halign = Align.END,
@@ -80,34 +89,33 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
         overlay.add_overlay (settings_button);
 
         content = overlay;
-
+        bind_events ();
         resize_window ();
+    }
 
+    private void bind_events () {
         settings.changed.connect (on_settings_changed);
         map.connect (on_map);
+        empty_dir_placeholder_button.clicked.connect (on_empty_dir_placeholder_button_clicked);
+        slideshow_playlist.current_changed.connect (on_playlist_current_changed);
     }
 
     private void on_map () {
-        load_image_files ();
-        start_slideshow ();
+        init_playlist.begin ((obj, res) => init_playlist.end (res));
     }
 
     private void on_settings_changed (string key) {
         if (key == "album-folder") {
-            load_image_files ();
-            start_slideshow ();
+            slideshow_playlist.stop ();
+            init_playlist.begin ((obj, res) => init_playlist.end (res));
         }
 
         if (key == "duration") {
-            reset_duration ();
+            slideshow_playlist.reset_display_duration (settings.get_int ("duration"));
         }
 
         if (key == "width" || key == "height") {
             resize_window ();
-        }
-
-        if (key == "shuffle") {
-            reset_slides ();
         }
     }
 
@@ -116,107 +124,62 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
         settings_dialog.show ();
     }
 
-    private void start_slideshow () {
-        info ("Playing slideshow...");
-        show_next ();
-        play ();
-    }
-
-    private void stop_slideshow () {
-        if (picture_timeout_id > 0) {
-            Source.remove (picture_timeout_id);
-        }
-    }
-
-    private void reset_slides () {
-        info ("Resetting slide show.");
-        images_to_show.add_all (shown_images);
-        sort_images ();
-        shown_images.clear ();
-    }
-
-    private void reset_duration () {
-        stop ();
-        picture_duration = settings.get_int ("duration");
-        play ();
-    }
-
-    private void sort_images () {
-        images_to_show.order_by ((image1, image2) => image1.filename >= image2.filename ? 1 : -1);
-    }
-
-    private void load_image_files () {
-        string album_path = settings.get_string ("album-folder");
-        info ("Loading album.");
-
-        stop_slideshow ();
-
-        Dir directory = null;
-
-        // If selected folder can't be opened,
-        // Reset to Home's pictures folder of user.
-        try {
-            info ("Opening album directory.");
-            directory = Dir.open (album_path);
-        } catch (FileError e) {
-            album_path = Environment.get_home_dir () + "/Pictures";
-            settings.set_string ("album-folder", album_path);
-        }
-
-        info ("Removing current album pictures in picture stack.");
-
-        // Reset slideshow image items
-        images_to_show = new ArrayList<SlideshowImage>();
-        shown_images = new ArrayQueue<SlideshowImage>();
-
-        // Read filenames from the directory
-        string filename;
-        while ((filename = directory.read_name ()) != null) {
-            string full_path = album_path + "/" + filename;
-
-            var slideshow_image = SlideshowImage.from_file (full_path);
-            if (slideshow_image == null) {
-                continue;
+    private void on_empty_dir_placeholder_button_clicked () {
+        var initial_folder = File.new_for_path (settings.get_string ("album-folder"));
+        var file_dialog = new FileDialog () {
+            initial_folder = initial_folder
+        };
+        file_dialog.select_folder.begin (this, null, (obj, result) => {
+            try {
+                File file = file_dialog.select_folder.end (result);
+                settings.set_string ("album-folder", file.get_path ());
+            } catch (Error e) {
+                info (e.message);
             }
-
-            // Add file to show in list of images
-            // if found to be an image file.
-            images_to_show.add (slideshow_image);
-            picture_stack.add_named (slideshow_image.picture, filename);
-            info ("Added %s in pic stack", slideshow_image.filename);
-        }
-
-        sort_images ();
-
-        info ("Done creating picture stack");
+        });
     }
 
-    private void show_next () {
-        info ("Showing next picture.");
-
-        debug ("Adding current image to shown_images list.");
-        if (current_image != null) {
-            shown_images.offer (current_image);
-            current_image.unload_picture ();
-        }
-
-        bool shuffle = settings.get_boolean ("shuffle");
-
-        current_image = shuffle
-            ? get_next_random_image ()
-            : images_to_show.remove_at (0);
-        debug ("Current image: %s", current_image.filename);
-
-        reload_image ();
-        picture_stack.set_visible_child_name (current_image.filename);
-
-        info ("Current picture set.");
+    private void on_playlist_current_changed (SlideshowImage image) {
+        info ("Showing image %s with %ix%i resolution...", image.filename, width_request, height_request);
+        image.load_picture (width_request, height_request);
+        picture_stack.set_visible_child_name (image.id.to_string ());
+        info ("Image %s shown in stack!", image.filename);
     }
 
-    private SlideshowImage get_next_random_image () {
-        var rand = new Rand ();
-        int index = rand.int_range (0, images_to_show.size);
-        return images_to_show.remove_at (index);
+    private async void init_playlist () {
+        show_loading ();
+        string album_path = settings.get_string ("album-folder");
+        int duration = settings.get_int ("duration");
+
+        info ("Initializing playlist...");
+        yield slideshow_playlist.initialize_async (album_path, duration);
+
+        foreach (var image in slideshow_playlist.image_queue) {
+            picture_stack.add_named (image.picture, image.id.to_string ());
+            info ("Added picture %s with id %i.", image.filename, image.id);
+        }
+
+        if (slideshow_playlist.empty) {
+            show_empty_page ();
+            info ("Playlist empty.");
+        } else {
+            show_playlist ();
+            slideshow_playlist.play ();
+            info ("Playlist initialized.");
+        }
+    }
+
+    private void show_loading () {
+        main_content.set_visible_child_name ("loading");
+    }
+
+    private void show_playlist () {
+        main_content.set_visible_child_name ("picture_stack");
+    }
+
+    private void show_empty_page () {
+        info ("Empty directory selected.");
+        main_content.set_visible_child_name ("empty_dir");
     }
 
     void resize_window () {
@@ -226,25 +189,6 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
     }
 
     void reload_image () {
-        current_image.load_picture (width_request, height_request);
-    }
-
-    private void play () {
-        picture_timeout_id = Timeout.add_seconds (picture_duration, () => {
-            info ("Pic duration: %i", picture_duration);
-            show_next ();
-            if (images_to_show.size == 0) {
-                reset_slides ();
-            }
-            return true;
-        }, Priority.DEFAULT);
-    }
-
-    private void stop () {
-        if (picture_timeout_id > 0) {
-            Source.remove (picture_timeout_id);
-            picture_timeout_id = -1;
-            info ("Interval reset!");
-        }
+        slideshow_playlist.current ? .load_picture (width_request, height_request);
     }
 }

@@ -10,11 +10,11 @@ namespace Larawan.Models {
     public class SlideshowImage : Object {
         uint unload_timeout_id;
 
-        public static SlideshowImage ? from_file (string filepath) {
+        public static SlideshowImage ? from_file (int id, string filepath) {
             if (!SlideshowImage.is_image_file (filepath)) {
                 return null;
             }
-            return new SlideshowImage (filepath);
+            return new SlideshowImage (id, filepath);
         }
 
         public static bool is_image_file (string file_path) {
@@ -33,6 +33,8 @@ namespace Larawan.Models {
             return path.substring (index + 1);
         }
 
+        public int id { get; construct set; }
+
         public string filepath { get; construct set; }
 
         public string filename {
@@ -43,8 +45,11 @@ namespace Larawan.Models {
 
         public Picture picture { get; construct set; }
 
-        public SlideshowImage (string filepath) {
-            Object (filepath: filepath);
+        public SlideshowImage (int id, string filepath) {
+            Object (
+                id: id,
+                filepath: filepath
+            );
         }
 
         construct {
@@ -90,11 +95,6 @@ namespace Larawan.Models {
                     new_width,
                     new_height,
                     InterpType.BILINEAR);
-                // Pixbuf pixbuf = new Pixbuf.from_file_at_scale (
-                // this.filepath,
-                // new_width, // new_size.width,
-                // new_height, // new_size.height,
-                // true);
 
                 debug ("actual size %ix%i", pixbuf.width, pixbuf.height);
 

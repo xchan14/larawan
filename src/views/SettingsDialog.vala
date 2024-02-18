@@ -10,9 +10,13 @@ using Larawan.Widgets;
 public class Larawan.Views.SettingsDialog : Granite.Dialog {
 
     EntryButton album_folder = null;
-    Adjustment adjustment = null;
     Switch shuffle_switch = null;
     GLib.Settings settings;
+    FileDialog file_dialog;
+    Scale duration_scale;
+    Scale window_width_scale;
+    Scale window_height_scale;
+    Box root_box;
 
     public ApplicationWindow window { get; construct set; }
 
@@ -25,29 +29,21 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         set_size_request (500, 0);
         add_css_class ("settings-dialog");
         resizable = false;
+        root_box = new Box (Orientation.VERTICAL, 10);
 
-        settings = new GLib.Settings (APP_ID);
-        var box = new Box (Orientation.VERTICAL, 10);
+        add_album_folder_field ();
+        add_shuffle_field ();
+        add_duration_field ();
+        add_width_field ();
+        add_height_field ();
 
-        // Album folder
-        var folder_label = new Label ("Album Folder") {
-            xalign = 0.0f
-        };
-        folder_label.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
+        add_button ("Close", Gtk.ResponseType.CANCEL);
+        get_content_area ().append (root_box);
+        bind_settings ();
+        bind_events ();
+    }
 
-        album_folder = new EntryButton.from_icon_name ("folder-open");
-        album_folder.readonly = true;
-        album_folder.hexpand = true;
-
-        settings.bind (
-            "album-folder",
-            album_folder,
-            "text",
-            SettingsBindFlags.DEFAULT);
-
-        var file_dialog = new FileDialog () {
-            initial_folder = File.new_for_path (album_folder.text)
-        };
+    private void bind_events () {
         album_folder.clicked.connect (() => {
             file_dialog.select_folder.begin (window, null, (obj, result) => {
                 try {
@@ -59,24 +55,49 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
             });
         });
 
-        box.append (folder_label);
-        box.append (album_folder);
+        response.connect ((response_id) => {
+            if (response_id == Gtk.ResponseType.CANCEL) {
+                destroy ();
+            }
+        });
+    }
 
-        // Shuffle
+    private void bind_settings () {
+        settings = new GLib.Settings (APP_ID);
+        settings.bind ("album-folder", album_folder, "text", SettingsBindFlags.DEFAULT);
+        settings.bind ("shuffle", shuffle_switch, "active", SettingsBindFlags.DEFAULT);
+        settings.bind ("duration", duration_scale.adjustment, "value", SettingsBindFlags.DEFAULT);
+        settings.bind ("width", window_width_scale.adjustment, "value", SettingsBindFlags.DEFAULT);
+        settings.bind ("height", window_height_scale.adjustment, "value", SettingsBindFlags.DEFAULT);
+    }
+
+    private void add_album_folder_field () {
+        var folder_label = new Label ("Album Folder") {
+            xalign = 0.0f
+        };
+        folder_label.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
+
+        album_folder = new EntryButton.from_icon_name ("folder-open");
+        album_folder.readonly = true;
+        album_folder.hexpand = true;
+        string pictures_dir = Path.build_filename (Environment.get_home_dir (), "Pictures");
+
+        file_dialog = new FileDialog () {
+            initial_folder = File.new_for_path (pictures_dir)
+        };
+
+        root_box.append (folder_label);
+        root_box.append (album_folder);
+    }
+
+    private void add_shuffle_field () {
         var shuffle_label = new Label ("Shuffle") {
             xalign = 0.0f
         };
         shuffle_label.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
-
         shuffle_switch = new Switch () {
             hexpand = false
         };
-
-        settings.bind (
-            "shuffle",
-            shuffle_switch,
-            "active",
-            SettingsBindFlags.DEFAULT);
 
         var shuffle_box = new Box (Orientation.HORIZONTAL, 0);
         var shuffle_desc = new Label ("Shuffles images to be displayed.") {
@@ -89,90 +110,63 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         shuffle_box.append (shuffle_desc);
         shuffle_box.append (shuffle_switch);
 
-        box.append (shuffle_label);
-        box.append (shuffle_box);
+        root_box.append (shuffle_label);
+        root_box.append (shuffle_box);
+    }
 
-        // Duration
+    private void add_duration_field () {
         var duration_label = new Label ("Duration") {
             xalign = 0.0f
         };
         duration_label.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
 
-        var duration_scale = new Scale.with_range (Orientation.HORIZONTAL, 1, 60, 1) {
+        duration_scale = new Scale.with_range (Orientation.HORIZONTAL, 1, 60, 1) {
             digits = 0,
             draw_value = true,
             hexpand = true,
         };
-        adjustment = duration_scale.adjustment;
-
-        settings.bind (
-            "duration",
-            adjustment,
-            "value",
-            SettingsBindFlags.DEFAULT);
+        duration_scale.adjustment.value = 7;
 
         var duration_box = new Box (Orientation.VERTICAL, 0);
         duration_box.append (duration_label);
         duration_box.append (duration_scale);
 
-        box.append (duration_box);
+        root_box.append (duration_box);
+    }
 
-        // Width
+    private void add_width_field () {
         var window_width_label = new Label ("Window Width") {
             xalign = 0.0f
         };
         window_width_label.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
 
-        var window_width_scale = new Scale.with_range (Orientation.HORIZONTAL, 300, 800, 1) {
+        window_width_scale = new Scale.with_range (Orientation.HORIZONTAL, 300, 800, 1) {
             digits = 0,
             draw_value = true,
             hexpand = true,
         };
-        adjustment = window_width_scale.adjustment;
-
-        settings.bind (
-            "width",
-            adjustment,
-            "value",
-            SettingsBindFlags.DEFAULT);
 
         var window_width_box = new Box (Orientation.VERTICAL, 0);
         window_width_box.append (window_width_label);
         window_width_box.append (window_width_scale);
-        box.append (window_width_box);
+        root_box.append (window_width_box);
+    }
 
-        // Height
+    private void add_height_field () {
         var window_height_label = new Label ("Window Height") {
             xalign = 0.0f
         };
         window_height_label.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
 
-        var window_height_scale = new Scale.with_range (Orientation.HORIZONTAL, 300, 800, 1) {
+        window_height_scale = new Scale.with_range (Orientation.HORIZONTAL, 300, 800, 1) {
             digits = 0,
             draw_value = true,
             hexpand = true,
         };
-        adjustment = window_height_scale.adjustment;
-
-        settings.bind (
-            "height",
-            adjustment,
-            "value",
-            SettingsBindFlags.DEFAULT);
 
         var window_height_box = new Box (Orientation.VERTICAL, 0);
         window_height_box.append (window_height_label);
         window_height_box.append (window_height_scale);
-        box.append (window_height_box);
-
-        add_button ("Close", Gtk.ResponseType.CANCEL);
-
-        get_content_area ().append (box);
-
-        response.connect ((response_id) => {
-            if (response_id == Gtk.ResponseType.CANCEL) {
-                destroy ();
-            }
-        });
+        root_box.append (window_height_box);
     }
 }

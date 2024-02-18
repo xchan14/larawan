@@ -14,6 +14,12 @@
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam consectetur, nisi sit amet varius tempus, massa odio finibus ipsum, nec lobortis ligula metus non justo. Vivamus auctor nulla ut odio aliquam, vel mollis eros viverra. Suspendisse potenti. In vehicula justo eget diam tincidunt, vitae commodo leo molestie. Sed ultricies ligula sed sem efficitur, eget elementum neque consectetur. Vivamus a velit justo. Etiam feugiat eleifend arcu, ac interdum nisi commodo a. Vivamus eu lorem eget nunc vehicula sollicitudin. Suspendisse potenti. Integer et nibh eu lectus posuere pellentesque vel a lectus. Quisque quis ante neque. Vivamus non eros nec ipsum consequat malesuada. Integer ultricies nunc id lacus commodo, sit amet ultricies risus dictum. Sed rhoncus leo sed ipsum placerat fermentum. Sed semper enim non orci vehicula, in sodales urna egestas. Maecenas volutpat sollicitudin vestibulum.
     </p>
   </description>
+
+  <content_rating type="oars-1.1" />
+
+  <screenshot>
+  </screenshot>
+
   
   <launchable type="desktop-id">io.github.xchan14.larawan.desktop</launchable>
 </component>

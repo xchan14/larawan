@@ -20,6 +20,8 @@ executable(
     'src' / 'views' / 'MainWindow.vala',
     'src' / 'views' / 'SettingsDialog.vala',
     'src' / 'models' / 'SlideshowImage.vala',
+    'src' / 'models' / 'SlideshowPlaylist.vala',
+    'src' / 'models' / 'FileHelper.vala',
     dependencies: [
         dependency('glib-2.0', version: '>=2.70'),
         dependency('gtk4'),
