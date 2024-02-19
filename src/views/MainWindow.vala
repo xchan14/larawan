@@ -154,6 +154,9 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
         info ("Initializing playlist...");
         yield slideshow_playlist.initialize_async (album_path, duration);
 
+        slideshow_playlist.stop ();
+        clear_picture_stack ();
+
         foreach (var image in slideshow_playlist.image_queue) {
             picture_stack.add_named (image.picture, image.id.to_string ());
             info ("Added picture %s with id %i.", image.filename, image.id);
@@ -180,6 +183,19 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
     private void show_empty_page () {
         info ("Empty directory selected.");
         main_content.set_visible_child_name ("empty_dir");
+    }
+
+    private void clear_picture_stack () {
+        info ("Clearing picture stack...");
+        if (picture_stack != null) {
+            foreach (var id in slideshow_playlist.image_ids) {
+                var child = picture_stack.get_child_by_name (id);
+                if (child != null) {
+                    picture_stack.remove (child);
+                    child.destroy ();
+                }
+            }
+        }
     }
 
     void resize_window () {

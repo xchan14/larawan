@@ -4,18 +4,4 @@
   <gresource prefix="/io/github/xchan14/larawan">
     <file alias="application.css" compressed="true">application.css</file>
   </gresource>
-  <!-- <gresource prefix="/io/github/xchan14/larawan/icons">
-    <file alias="16x16/actions/app-icon.svg" compressed="true" preprocess="xml-stripblanks">app-icon-16.svg</file>
-    <file alias="16x16@2/actions/app-icon.svg" compressed="true" preprocess="xml-stripblanks">app-icon-16.svg</file>
-    <file alias="24x24/actions/app-icon.svg" compressed="true" preprocess="xml-stripblanks">app-icon-24.svg</file>
-    <file alias="24x24@2/actions/app-icon.svg" compressed="true" preprocess="xml-stripblanks">app-icon-24.svg</file>
-    <file alias="32x32/actions/app-icon.svg" compressed="true" preprocess="xml-stripblanks">app-icon-32.svg</file>
-    <file alias="32x32@2/actions/app-icon.svg" compressed="true" preprocess="xml-stripblanks">app-icon-32.svg</file>
-    <file alias="48x48/actions/app-icon.svg" compressed="true" preprocess="xml-stripblanks">app-icon-48.svg</file>
-    <file alias="48x48@2/actions/app-icon.svg" compressed="true" preprocess="xml-stripblanks">app-icon-48.svg</file>
-    <file alias="64x64/actions/app-icon.svg" compressed="true" preprocess="xml-stripblanks">app-icon-64.svg</file>
-    <file alias="64x64@2/actions/app-icon.svg" compressed="true" preprocess="xml-stripblanks">app-icon-64.svg</file>
-    <file alias="128x128/actions/app-icon.svg" compressed="true" preprocess="xml-stripblanks">app-icon-128.svg</file>
-    <file alias="128x128@2/actions/app-icon.svg" compressed="true" preprocess="xml-stripblanks">app-icon-128.svg</file>
-  </gresource> -->
 </gresources>

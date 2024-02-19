@@ -22,6 +22,22 @@ namespace Larawan.Models {
 
         public SlideshowImage current { get; private set; }
 
+        public string[] image_ids {
+            owned get {
+                var ids = new ArrayList<string>();
+
+                foreach (var image in image_queue) {
+                    ids.add (image.id.to_string ());
+                }
+
+                foreach (var image in _shown_images) {
+                    ids.add (image.id.to_string ());
+                }
+
+                return ids.to_array ();
+            }
+        }
+
         public Gee.List<SlideshowImage> image_queue {
             owned get {
                 return _image_queue.read_only_view;
@@ -35,19 +51,26 @@ namespace Larawan.Models {
         }
 
         construct {
+            is_playing = false;
+        }
+
+        private void reset_data () {
             _image_queue = new ArrayList<SlideshowImage>();
             _shown_images = new ArrayList<SlideshowImage>();
             image_files = new ArrayList<string>();
-            is_playing = false;
+            current = null;
         }
 
         public async void initialize_async (string path, int duration) {
             info ("Initialzing queue...");
+            reset_data ();
+
             string[] files = yield FileHelper.get_files_recursively_async (path);
 
             debug ("No. of files: %i", files ? .length ?? 0);
             debug ("Duration: %i", duration);
             this.duration = duration;
+
             int id_counter = 1;
             foreach (var file in files) {
                 var slideshow_image = SlideshowImage.from_file (id_counter, file);

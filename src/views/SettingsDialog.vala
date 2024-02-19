@@ -32,7 +32,6 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         root_box = new Box (Orientation.VERTICAL, 10);
 
         add_album_folder_field ();
-        add_shuffle_field ();
         add_duration_field ();
         add_width_field ();
         add_height_field ();
@@ -88,30 +87,6 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
 
         root_box.append (folder_label);
         root_box.append (album_folder);
-    }
-
-    private void add_shuffle_field () {
-        var shuffle_label = new Label ("Shuffle") {
-            xalign = 0.0f
-        };
-        shuffle_label.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
-        shuffle_switch = new Switch () {
-            hexpand = false
-        };
-
-        var shuffle_box = new Box (Orientation.HORIZONTAL, 0);
-        var shuffle_desc = new Label ("Shuffles images to be displayed.") {
-            hexpand = true,
-            xalign = 0.0f,
-            yalign = 0.0f
-        };
-        shuffle_desc.add_css_class (Granite.STYLE_CLASS_H3_LABEL);
-        shuffle_desc.add_css_class ("shuffle-desc");
-        shuffle_box.append (shuffle_desc);
-        shuffle_box.append (shuffle_switch);
-
-        root_box.append (shuffle_label);
-        root_box.append (shuffle_box);
     }
 
     private void add_duration_field () {
