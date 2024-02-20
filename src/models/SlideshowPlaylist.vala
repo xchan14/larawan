@@ -61,11 +61,11 @@ namespace Larawan.Models {
             current = null;
         }
 
-        public async void initialize_async (string path, int duration) {
+        public async void initialize_async (string path, int duration, bool recursive) {
             info ("Initialzing queue...");
             reset_data ();
 
-            string[] files = yield FileHelper.get_files_recursively_async (path);
+            string[] files = yield FileHelper.get_files_async (path, recursive);
 
             debug ("No. of files: %i", files ? .length ?? 0);
             debug ("Duration: %i", duration);
@@ -109,12 +109,11 @@ namespace Larawan.Models {
                 info ("Pic duration: %i", duration);
 
                 if (is_queue_empty ()) {
-                    stop ();
-                    _image_queue.add_all (_shown_images);
-                    play ();
+                    reset_image_queue ();
                 } else {
                     next ();
                 }
+
                 return true;
             }, Priority.DEFAULT);
 
@@ -130,6 +129,7 @@ namespace Larawan.Models {
         }
 
         public void stop () {
+            info ("Stopping playlist.");
             if (picture_timeout_id > 0) {
                 Source.remove (picture_timeout_id);
                 picture_timeout_id = -1;
@@ -140,10 +140,12 @@ namespace Larawan.Models {
         }
 
         private void clear () {
+            info ("Clearing image queue.");
             foreach (var image in image_queue) {
                 image.picture.destroy ();
             }
             _image_queue.clear ();
+            info ("Image queue cleared.");
         }
 
         private bool is_queue_empty () {
@@ -154,6 +156,14 @@ namespace Larawan.Models {
             var rand = new Rand ();
             int index = rand.int_range (0, _image_queue.size);
             return _image_queue.remove_at (index);
+        }
+
+        private void reset_image_queue () {
+            info ("Resetting image queue...");
+            stop ();
+            _image_queue.add_all (_shown_images);
+            play ();
+            info ("Image queue reset.");
         }
 
         public void reset_display_duration (int new_duration) {

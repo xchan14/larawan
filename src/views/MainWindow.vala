@@ -105,7 +105,7 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
     }
 
     private void on_settings_changed (string key) {
-        if (key == "album-folder") {
+        if (key == "album-folder" || key == "recursive") {
             slideshow_playlist.stop ();
             init_playlist.begin ((obj, res) => init_playlist.end (res));
         }
@@ -120,7 +120,9 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
     }
 
     private void on_settings_button_clicked () {
-        settings_dialog = new SettingsDialog (this);
+        if (settings_dialog == null) {
+            settings_dialog = new SettingsDialog (this);
+        }
         settings_dialog.show ();
     }
 
@@ -150,9 +152,10 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
         show_loading ();
         string album_path = settings.get_string ("album-folder");
         int duration = settings.get_int ("duration");
+        bool recursive = settings.get_boolean ("recursive");
 
         info ("Initializing playlist...");
-        yield slideshow_playlist.initialize_async (album_path, duration);
+        yield slideshow_playlist.initialize_async (album_path, duration, recursive);
 
         slideshow_playlist.stop ();
         clear_picture_stack ();

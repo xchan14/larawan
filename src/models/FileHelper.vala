@@ -9,7 +9,7 @@ namespace Larawan.Models {
 
     public class FileHelper {
 
-        public static async string[] get_files_recursively_async (string path) {
+        public static async string[] get_files_async (string path, bool recursive = false) {
             var files = new ArrayList<string>();
 
             // If selected folder can't be opened,
@@ -23,8 +23,8 @@ namespace Larawan.Models {
                     string full_path = path + "/" + filename;
                     bool is_dir = yield is_directory (full_path);
 
-                    if (is_dir) {
-                        var subdir_files = yield get_files_recursively_async (full_path);
+                    if (is_dir && recursive) {
+                        var subdir_files = yield get_files_async (full_path);
 
                         foreach (var file in subdir_files) {
                             files.add (file);

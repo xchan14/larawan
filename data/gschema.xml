@@ -6,6 +6,11 @@
       <summary>Album Path</summary>
       <description>Album Path</description>
     </key>
+    <key name="recursive" type="b">
+      <default>false</default>
+      <summary>Recursive</summary>
+      <description>Duration of shown image before transitioning to next</description>
+    </key>
     <key name="duration" type="i">
       <default>5</default>
       <summary>Duration</summary>

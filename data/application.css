@@ -31,3 +31,12 @@
   border-bottom-left-radius: 0;
   box-shadow: none;
 }
+
+.window-legend-label {
+  padding-bottom: 0;
+  padding-top: 30px;
+}
+
+.recursive-box {
+  padding-top: 15px;
+}
