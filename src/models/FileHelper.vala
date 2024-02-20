@@ -21,10 +21,14 @@ namespace Larawan.Models {
                 string filename;
                 while ((filename = directory.read_name ()) != null) {
                     string full_path = path + "/" + filename;
-                    bool is_dir = yield is_directory (full_path);
 
-                    if (is_dir && recursive) {
-                        var subdir_files = yield get_files_async (full_path);
+                    if (!FileUtils.test (full_path, FileTest.EXISTS)) {
+                        info ("%s does not exist.", full_path);
+                        continue;
+                    }
+
+                    if (FileUtils.test (full_path, FileTest.IS_DIR) && recursive) {
+                        string[] subdir_files = yield get_files_async (full_path, recursive);
 
                         foreach (var file in subdir_files) {
                             files.add (file);
@@ -38,18 +42,6 @@ namespace Larawan.Models {
                 info ("Error opening directory of %s.", path);
                 info ("%s: %s", e.domain.to_string (), e.message);
                 return files.to_array ();
-            }
-        }
-
-        public static async bool is_directory (string path) {
-            try {
-                var file = File.new_for_path (path);
-                FileInfo file_info = yield file.query_info_async ("standard::type", FileQueryInfoFlags.NONE, Priority.DEFAULT);
-
-                FileType file_type = file_info.get_file_type ();
-                return file_type == FileType.DIRECTORY;
-            } catch (Error e) {
-                error (e.message);
             }
         }
     }

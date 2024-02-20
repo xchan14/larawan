@@ -13,6 +13,7 @@ using Larawan.Models;
 public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
 
     SlideshowPlaylist slideshow_playlist;
+    uint resize_timeout_id = 0;
 
     Stack picture_stack;
     SettingsDialog settings_dialog;
@@ -32,7 +33,7 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
         resizable = false;
         slideshow_playlist = new SlideshowPlaylist ();
         settings = new GLib.Settings (APP_ID);
-        settings.set_string ("album-folder", "/home/xchan/pCloud/Photos/Wallpaper/Desktop");
+        set_size_request (settings.get_int ("width"), settings.get_int ("height"));
 
         picture_stack = new Stack () {
             transition_type = StackTransitionType.SLIDE_LEFT_RIGHT,
@@ -90,7 +91,6 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
 
         content = overlay;
         bind_events ();
-        resize_window ();
     }
 
     private void bind_events () {
@@ -204,10 +204,25 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
     void resize_window () {
         width_request = settings.get_int ("width");
         height_request = settings.get_int ("height");
+
+        if (resize_timeout_id == 0) {
+            info ("Resizing window...");
+            resize_timeout_id = Timeout.add (1000, () => {
+                resize_done ();
+                return false;
+            }, Priority.HIGH);
+        }
+    }
+
+    void resize_done () {
+
         reload_image ();
+        Source.remove (resize_timeout_id);
+        resize_timeout_id = -1;
     }
 
     void reload_image () {
+        info ("Reloading image...");
         slideshow_playlist.current ? .load_picture (width_request, height_request);
     }
 }

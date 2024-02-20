@@ -9,7 +9,7 @@ namespace Larawan.Models {
     public class SlideshowPlaylist : Object {
         ArrayList<SlideshowImage> _image_queue;
         ArrayList<SlideshowImage> _shown_images;
-        uint picture_timeout_id = -1;
+        uint picture_timeout_id = 0;
 
         public signal void current_changed (SlideshowImage image);
         public signal void queue_empty ();
@@ -132,7 +132,7 @@ namespace Larawan.Models {
             info ("Stopping playlist.");
             if (picture_timeout_id > 0) {
                 Source.remove (picture_timeout_id);
-                picture_timeout_id = -1;
+                picture_timeout_id = 0;
                 info ("Interval reset!");
             }
             is_playing = false;
