@@ -17,6 +17,7 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
     Switch recursive_switch;
     Scale window_width_scale;
     Scale window_height_scale;
+    LinkButton startup_linkbutton;
     Box root_box;
 
     public ApplicationWindow window { get; construct set; }
@@ -48,6 +49,8 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         window_label.add_css_class ("window-legend-label");
 
         root_box.append (window_label);
+        add_startup_field ();
+        add_always_visible_field ();
         add_width_field ();
         add_height_field ();
 
@@ -110,11 +113,11 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
     private void add_recursive_field () {
         var label = new Label ("Recursive: ") {
             xalign = 1.0f,
-            yalign = 0.7f,
             width_request = 150
         };
         recursive_switch = new Switch () {
-            active = false
+            active = false,
+            hexpand = false
         };
 
         var box = new Box (Orientation.HORIZONTAL, 10) {
@@ -122,7 +125,14 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         };
         box.add_css_class ("recursive-box");
         box.append (label);
-        box.append (recursive_switch);
+
+        var control_box = new Box (Orientation.HORIZONTAL, 10);
+        var desc_label = new Label ("Will include images from sub-directories if enabled.");
+        desc_label.add_css_class (Granite.STYLE_CLASS_H3_LABEL);
+        control_box.append (recursive_switch);
+        control_box.append (desc_label);
+
+        box.append (control_box);
 
         root_box.append (box);
     }
@@ -150,6 +160,25 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         root_box.append (duration_box);
     }
 
+    private void add_startup_field () {
+        var label = new Label ("Startup: ") {
+            xalign = 1.0f,
+            yalign = 0.7f,
+            width_request = 150
+        };
+
+        startup_linkbutton = new LinkButton.with_label (
+            "settings://applications/startup",
+            "Auto start 'Larawan' by adding it here."
+        );
+
+        var box = new Box (Orientation.HORIZONTAL, 10);
+        box.add_css_class ("form-field");
+        box.append (label);
+        box.append (startup_linkbutton);
+        root_box.append (box);
+    }
+
     private void add_width_field () {
         var window_width_label = new Label ("Width: ") {
             xalign = 1.0f,
@@ -163,10 +192,11 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
             hexpand = true,
         };
 
-        var window_width_box = new Box (Orientation.HORIZONTAL, 10);
-        window_width_box.append (window_width_label);
-        window_width_box.append (window_width_scale);
-        root_box.append (window_width_box);
+        var box = new Box (Orientation.HORIZONTAL, 10);
+        box.add_css_class ("form-field");
+        box.append (window_width_label);
+        box.append (window_width_scale);
+        root_box.append (box);
     }
 
     private void add_height_field () {
@@ -182,9 +212,28 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
             hexpand = true,
         };
 
-        var window_height_box = new Box (Orientation.HORIZONTAL, 10);
-        window_height_box.append (window_height_label);
-        window_height_box.append (window_height_scale);
-        root_box.append (window_height_box);
+        var box = new Box (Orientation.HORIZONTAL, 10);
+        box.add_css_class ("form-field");
+        box.append (window_height_label);
+        box.append (window_height_scale);
+        root_box.append (box);
+    }
+
+    private void add_always_visible_field () {
+        var label = new Label ("Always Visible: ") {
+            xalign = 1.0f,
+            yalign = 0.7f,
+            width_request = 150
+        };
+
+        var always_visible_label = new Label (
+            "Right click app > Click 'Always on Top'"
+        );
+
+        var box = new Box (Orientation.HORIZONTAL, 10);
+        box.add_css_class ("form-field");
+        box.append (label);
+        box.append (always_visible_label);
+        root_box.append (box);
     }
 }

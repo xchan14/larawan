@@ -18,6 +18,10 @@
   padding-left: 16px;
 }
 
+.form-field {
+  margin-bottom: 16px
+}
+
 .entry-button-text {
   border-right: none;
   border-top-right-radius: 0;
@@ -33,7 +37,6 @@
 }
 
 .window-legend-label {
-  padding-bottom: 0;
   padding-top: 30px;
 }
 
