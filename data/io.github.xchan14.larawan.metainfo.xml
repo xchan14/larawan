@@ -17,9 +17,21 @@
 
   <content_rating type="oars-1.1" />
 
-  <screenshot>
-  </screenshot>
 
-  
+  <screenshots>
+    <screenshot type="default">
+      <caption>App</caption>
+      <image>https://github.com/xchan14/larawan/blob/main/data/screenshots/app.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Settings</caption>
+      <image>https://github.com/xchan14/larawan/blob/main/data/screenshots/settings.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>App with Settings</caption>
+      <image>https://github.com/xchan14/larawan/blob/main/data/screenshots/app_with_settings.png</image>
+    </screenshot>
+  </screenshots>
+
   <launchable type="desktop-id">io.github.xchan14.larawan.desktop</launchable>
 </component>
