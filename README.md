@@ -1,4 +1,7 @@
-<h1 align="center">Larawan</h1>
+<p align="center">
+    <img src="https://raw.githubusercontent.com/xchan14/larawan/7b65daff83094b557e435a37278b0a8e07854755/data/128.svg" />
+    <h1 align="center"> Larawan</h1>
+</p>
 
 <img src="https://github.com/xchan14/larawan/blob/main/data/screenshots/app_with_settings.png?raw=true" />
 
