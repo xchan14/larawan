@@ -27,14 +27,6 @@ public class Larawan.App : Gtk.Application {
         info ("Starting Larawan...");
         var main_window = new MainWindow (this);
 
-        var css_provider = new CssProvider ();
-        css_provider.load_from_resource ("io/github/xchan14/larawan/application.css");
-
-        StyleContext.add_provider_for_display (
-            Display.get_default (),
-            css_provider,
-            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-
         main_window.present ();
     }
 

@@ -2,6 +2,6 @@
 <!-- Copyright 2024 Christian Camilon <chancamilon@proton.me> -->
 <gresources>
   <gresource prefix="/io/github/xchan14/larawan">
-    <file alias="application.css" compressed="true">application.css</file>
+    <file alias="Application.css" compressed="true">Application.css</file>
   </gresource>
 </gresources>

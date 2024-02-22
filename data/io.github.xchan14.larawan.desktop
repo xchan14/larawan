@@ -3,7 +3,7 @@ Version=1.0
 Type=Application
 
 Name=Larawan
-Comment=Slideshow app for elementary OS
+Comment=Make your desktop lively with a slideshow of your photos
 Categories=Graphics;Amusement;
 
 Icon=io.github.xchan14.larawan

@@ -5,7 +5,7 @@
 
 <img src="https://github.com/xchan14/larawan/blob/main/data/screenshots/app_with_settings.png?raw=true" />
 
-A slideshow widget developed for elementary OS.
+Make your desktop alive with a slideshow app of your photo albums. A slideshow widget developed for elementary OS.
 
 ## Support
 
@@ -28,4 +28,4 @@ Use `./run-restart.sh` to build and start the app.
 
 io.elementary.Platform
 
-<p>Version: 7.2</p>
+<p>Version: 7.3</p>
