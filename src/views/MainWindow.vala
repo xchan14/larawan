@@ -74,13 +74,17 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
             child = scrolled_window,
         };
 
-        settings_button = new Button.with_label ("⚙️") {
+        settings_button = new Button.from_icon_name ("open-menu") {
             halign = Align.END,
             valign = Align.END,
-            can_focus = false
+            can_focus = false,
+            tooltip_text = "Settings",
+            vexpand = true,
+            hexpand = true
         };
         settings_button.add_css_class ("settings-button");
         settings_button.clicked.connect (on_settings_button_clicked);
+        ((Image) settings_button.child).pixel_size = 32;
 
         var overlay = new Overlay () {
             child = window_handle,

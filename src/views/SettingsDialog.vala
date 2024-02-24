@@ -167,15 +167,21 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
             width_request = 150
         };
 
+        var label_text = new Label ("Auto start <b>Larawan</b> by adding it ") {
+            use_markup = true
+        };
         startup_linkbutton = new LinkButton.with_label (
             "settings://applications/startup",
-            "Auto start 'Larawan' by adding it here."
+            "here."
         );
+        var value_box = new Box (Orientation.HORIZONTAL, 0);
+        value_box.append (label_text);
+        value_box.append (startup_linkbutton);
 
         var box = new Box (Orientation.HORIZONTAL, 10);
         box.add_css_class ("form-field");
         box.append (label);
-        box.append (startup_linkbutton);
+        box.append (value_box);
         root_box.append (box);
     }
 
@@ -226,9 +232,9 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
             width_request = 150
         };
 
-        var always_visible_label = new Label (
-            "Right click app > Click 'Always on Top'"
-        );
+        var always_visible_label = new Label ("Right click app > Click <b>Always on Top</b>") {
+            use_markup = true
+        };
 
         var box = new Box (Orientation.HORIZONTAL, 10);
         box.add_css_class ("form-field");

@@ -16,11 +16,16 @@ public class Larawan.App : Gtk.Application {
         );
     }
 
+    public static int main (string[] args) {
+        Granite.init ();
+        var app = new Larawan.App ();
+        return app.run (args);
+    }
+
     protected override void activate () {
         // Call the parent class's activate method
         base.activate ();
 
-        Granite.init ();
         apply_granite_theme ();
 
         // Create a new window
@@ -28,11 +33,6 @@ public class Larawan.App : Gtk.Application {
         var main_window = new MainWindow (this);
 
         main_window.present ();
-    }
-
-    public static int main (string[] args) {
-        var app = new Larawan.App ();
-        return app.run (args);
     }
 
     private void apply_granite_theme () {

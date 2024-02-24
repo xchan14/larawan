@@ -30,20 +30,7 @@ namespace Larawan.Widgets {
             }
         }
 
-        public string label {
-            get {
-                return button.label;
-            }
-            set {
-                button.label = value;
-            }
-        }
-
         public string icon_name { get; construct set; }
-
-        public EntryButton.with_label (string label) {
-            Object (label: label);
-        }
 
         public EntryButton.from_icon_name (string icon_name) {
             Object (icon_name: icon_name);

@@ -40,4 +40,16 @@
   </screenshots>
 
   <launchable type="desktop-id">io.github.xchan14.larawan.desktop</launchable>
+
+
+ <releases>
+    <release version="1.0.0" date="2024-02-23">
+      <description>
+        <ul>
+          <li>Initial Release</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
+
 </component>
