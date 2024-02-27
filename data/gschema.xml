@@ -17,12 +17,12 @@
       <description>Duration of shown image before transitioning to next</description>
     </key>
     <key name="width" type="i">
-      <default>360</default>
+      <default>450</default>
       <summary>Width</summary>
       <description>Width of slideshow window</description>
     </key>
     <key name="height" type="i">
-      <default>240</default>
+      <default>450</default>
       <summary>Height</summary>
       <description>Height of slideshow window</description>
     </key>
