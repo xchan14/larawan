@@ -43,6 +43,14 @@
 
 
  <releases>
+    <release version="1.0.1" date="2024-02-27">
+      <description>
+        <ul>
+          <li>Fixes screenshot not showing in AppCenter</li>
+          <li>Increases default window size</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.0" date="2024-02-23">
       <description>
         <ul>
