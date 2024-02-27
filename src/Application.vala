@@ -17,9 +17,13 @@ public class Larawan.App : Gtk.Application {
     }
 
     public static int main (string[] args) {
-        Granite.init ();
         var app = new Larawan.App ();
         return app.run (args);
+    }
+
+    public override void startup () {
+        base.startup ();
+        Granite.init ();
     }
 
     protected override void activate () {
