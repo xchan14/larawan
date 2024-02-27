@@ -84,7 +84,7 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
         };
         settings_button.add_css_class ("settings-button");
         settings_button.clicked.connect (on_settings_button_clicked);
-        ((Image) settings_button.child).pixel_size = 32;
+        settings_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
 
         var overlay = new Overlay () {
             child = window_handle,
