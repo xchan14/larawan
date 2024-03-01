@@ -33,7 +33,7 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         resizable = false;
         root_box = new Box (Orientation.VERTICAL, 10);
 
-        var slideshow_label = new Label ("Slideshow") {
+        var slideshow_label = new Label (_("Slideshow")) {
             xalign = 0.0f
         };
         slideshow_label.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
@@ -42,7 +42,7 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         add_recursive_field ();
         add_duration_field ();
 
-        var window_label = new Label ("Window") {
+        var window_label = new Label (_("Window")) {
             xalign = 0.0f
         };
         window_label.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
@@ -54,7 +54,7 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         add_width_field ();
         add_height_field ();
 
-        add_button ("Close", Gtk.ResponseType.CANCEL);
+        add_button (_("Close"), Gtk.ResponseType.CANCEL);
         get_content_area ().append (root_box);
         bind_settings ();
         bind_events ();
@@ -90,7 +90,7 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
     }
 
     private void add_album_folder_field () {
-        var folder_label = new Label ("Album Folder: ") {
+        var folder_label = new Label (_("Album Folder: ")) {
             xalign = 1.0f,
             width_request = 150,
             hexpand = false
@@ -111,7 +111,7 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
     }
 
     private void add_recursive_field () {
-        var label = new Label ("Recursive: ") {
+        var label = new Label (_("Recursive: ")) {
             xalign = 1.0f,
             width_request = 150
         };
@@ -127,7 +127,7 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         box.append (label);
 
         var control_box = new Box (Orientation.HORIZONTAL, 10);
-        var desc_label = new Label ("Will include images from sub-directories if enabled.");
+        var desc_label = new Label (_("Will include images from sub-directories if enabled."));
         desc_label.add_css_class (Granite.STYLE_CLASS_H3_LABEL);
         control_box.append (recursive_switch);
         control_box.append (desc_label);
@@ -138,7 +138,7 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
     }
 
     private void add_duration_field () {
-        var duration_label = new Label ("Duration: ") {
+        var duration_label = new Label (_("Duration: ")) {
             xalign = 1.0f,
             yalign = 0.7f,
             width_request = 150
@@ -161,18 +161,18 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
     }
 
     private void add_startup_field () {
-        var label = new Label ("Startup: ") {
+        var label = new Label (_("Startup: ")) {
             xalign = 1.0f,
             yalign = 0.7f,
             width_request = 150
         };
 
-        var label_text = new Label ("Auto start <b>Larawan</b> by adding it ") {
+        var label_text = new Label (_("Auto start <b>Larawan</b> by adding it ")) {
             use_markup = true
         };
         startup_linkbutton = new LinkButton.with_label (
             "settings://applications/startup",
-            "here."
+            _("here.")
         );
         var value_box = new Box (Orientation.HORIZONTAL, 0);
         value_box.append (label_text);
@@ -186,7 +186,7 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
     }
 
     private void add_width_field () {
-        var window_width_label = new Label ("Width: ") {
+        var window_width_label = new Label (_("Width: ")) {
             xalign = 1.0f,
             yalign = 0.7f,
             width_request = 150
@@ -206,7 +206,7 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
     }
 
     private void add_height_field () {
-        var window_height_label = new Label ("Height: ") {
+        var window_height_label = new Label (_("Height: ")) {
             xalign = 1.0f,
             yalign = 0.7f,
             width_request = 150
@@ -226,13 +226,13 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
     }
 
     private void add_always_visible_field () {
-        var label = new Label ("Always Visible: ") {
+        var label = new Label (_("Always Visible: ")) {
             xalign = 1.0f,
             yalign = 0.7f,
             width_request = 150
         };
 
-        var always_visible_label = new Label ("Right click app > Click <b>Always on Top</b>") {
+        var always_visible_label = new Label (_("Right click app > Click <b>Always on Top</b>")) {
             use_markup = true
         };
 

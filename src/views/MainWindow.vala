@@ -41,17 +41,17 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
             vexpand = true,
         };
 
-        empty_dir_placeholder = new Placeholder ("So Empty!") {
-            description = "Display album of your choice like your special someone or pets for example.",
+        empty_dir_placeholder = new Placeholder (_("So Empty!")) {
+            description = _("Display album of your choice like your special someone or pets for example."),
             hexpand = true
         };
         empty_dir_placeholder_button = empty_dir_placeholder.append_button (
             new ThemedIcon ("folder-open"),
-            "Select Album",
-            "Adds picture from selected album folder and subdirectory."
+            _("Select Album"),
+            _("Adds picture from selected album folder and subdirectory.")
         );
 
-        var loading_album = new Label ("Loading Album...");
+        var loading_album = new Label (_("Loading Album..."));
         loading_album.add_css_class (Granite.STYLE_CLASS_H1_LABEL);
 
         main_content = new Stack ();
@@ -78,7 +78,7 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
             halign = Align.END,
             valign = Align.END,
             can_focus = false,
-            tooltip_text = "Settings",
+            tooltip_text = _("Settings"),
             vexpand = true,
             hexpand = true
         };

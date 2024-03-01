@@ -1,0 +1,94 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the io.github.xchan14.larawan package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: io.github.xchan14.larawan\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-01 18:45+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/views/MainWindow.vala:44
+msgid "So Empty!"
+msgstr ""
+
+#: src/views/MainWindow.vala:50
+msgid "Select Album"
+msgstr ""
+
+#: src/views/MainWindow.vala:51
+msgid "Adds picture from selected album folder and subdirectory."
+msgstr ""
+
+#: src/views/MainWindow.vala:54
+msgid "Loading Album..."
+msgstr ""
+
+#: src/views/MainWindow.vala:81
+msgid "Settings"
+msgstr ""
+
+#: src/views/SettingsDialog.vala:36
+msgid "Slideshow"
+msgstr ""
+
+#: src/views/SettingsDialog.vala:45
+msgid "Window"
+msgstr ""
+
+#: src/views/SettingsDialog.vala:57
+msgid "Close"
+msgstr ""
+
+#: src/views/SettingsDialog.vala:93
+msgid "Album Folder: "
+msgstr ""
+
+#: src/views/SettingsDialog.vala:114
+msgid "Recursive: "
+msgstr ""
+
+#: src/views/SettingsDialog.vala:130
+msgid "Will include images from sub-directories if enabled."
+msgstr ""
+
+#: src/views/SettingsDialog.vala:141
+msgid "Duration: "
+msgstr ""
+
+#: src/views/SettingsDialog.vala:164
+msgid "Startup: "
+msgstr ""
+
+#: src/views/SettingsDialog.vala:170
+msgid "Auto start <b>Larawan</b> by adding it "
+msgstr ""
+
+#: src/views/SettingsDialog.vala:175
+msgid "here."
+msgstr ""
+
+#: src/views/SettingsDialog.vala:189
+msgid "Width: "
+msgstr ""
+
+#: src/views/SettingsDialog.vala:209
+msgid "Height: "
+msgstr ""
+
+#: src/views/SettingsDialog.vala:229
+msgid "Always Visible: "
+msgstr ""
+
+#: src/views/SettingsDialog.vala:235
+msgid "Right click app > Click <b>Always on Top</b>"
+msgstr ""
