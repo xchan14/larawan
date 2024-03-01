@@ -3,6 +3,10 @@ project('io.github.xchan14.larawan', 'vala', 'c')
 
 gnome = import('gnome')
 
+i18n = import('i18n')
+
+add_global_arguments('-DGETTEXT_PACKAGE="@0@"'.format (meson.project_name()), language:'c')
+
 asresources = gnome.compile_resources(
     'as-resources', 
     'data' / meson.project_name() + '.gresource.xml',
@@ -10,10 +14,20 @@ asresources = gnome.compile_resources(
     c_name: 'as'
 )
 
+config_data = configuration_data()
+config_data.set_quoted('LOCALEDIR', get_option('prefix') / get_option('localedir'))
+config_data.set_quoted('GETTEXT_PACKAGE', meson.project_name())
+config_file = configure_file(
+    input: 'src/Config.vala.in',
+    output: '@BASENAME@',
+    configuration: config_data
+)
+
 # Create a new executable, list the files we want to compile, list the dependencies we need, and install
 executable(
     meson.project_name(),
     asresources,
+    config_file,
     'src' / 'Application.vala',
     'src' / 'Constants.vala',
     'src' / 'widgets' / 'EntryButton.vala',
@@ -32,20 +46,26 @@ executable(
     install: true
 )
 
-# Install our .desktop file so the Applications Menu will see it
-install_data(
-    'data' / meson.project_name() + '.desktop',
-    install_dir: get_option('datadir') / 'applications',
-    rename: meson.project_name() + '.desktop'
+#Translate and install our .desktop file
+i18n.merge_file(
+    input: 'data' / meson.project_name() + '.desktop.in',
+    output: meson.project_name() + '.desktop',
+    po_dir: meson.source_root() / 'po',
+    type: 'desktop',
+    install: true,
+    install_dir: get_option('datadir') / 'applications'
 )
 
-# Install our .metainfo.xml file so AppCenter will see it
-install_data(
-    'data' / meson.project_name() + '.metainfo.xml',
-    install_dir: get_option('datadir') / 'metainfo',
-    rename: meson.project_name() + '.metainfo.xml'
+#Translate and install our .metainfo file
+i18n.merge_file(
+    input: 'data' / meson.project_name() + '.metainfo.xml.in',
+    output: meson.project_name() + '.metainfo.xml',
+    po_dir: meson.source_root() / 'po',
+    install: true,
+    install_dir: get_option('datadir') / 'metainfo'
 )
 
+subdir('data')
+subdir('po')
 
 gnome.post_install(glib_compile_schemas: true)
-subdir('data')
