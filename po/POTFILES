@@ -1,3 +1,5 @@
+data/io.github.xchan14.larawan.desktop.in
+data/io.github.xchan14.larawan.metainfo.xml.in
 src/models/FileHelper.vala
 src/models/SlideshowImage.vala
 src/models/SlideshowPlaylist.vala

@@ -3,13 +3,12 @@
 # This file is distributed under the same license as the io.github.xchan14.larawan package.
 # lenemter <lenemter@gmail.com>, 2024.
 #
-
 msgid ""
 msgstr ""
 "Project-Id-Version: io.github.xchan14.larawan\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-01 18:45+0900\n"
-"PO-Revision-Date: 2024-03-01 18:45+0900\n"
+"POT-Creation-Date: 2024-03-01 18:55+0900\n"
+"PO-Revision-Date: 2024-03-01 18:55+0900\n"
 "Last-Translator: lenemter <lenemter@gmail.com>\n"
 "Language-Team: none\n"
 "Language: ru\n"
@@ -17,9 +16,60 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: data/io.github.xchan14.larawan.desktop.in:6
+#: data/io.github.xchan14.larawan.metainfo.xml.in:6
+msgid "Larawan"
+msgstr "Larawan"
+
+#: data/io.github.xchan14.larawan.desktop.in:7
+msgid "Make your desktop lively with a slideshow of your photos"
+msgstr "Оживите свой рабочий стол с помощью слайд-шоу из ваших фотографий"
+
+#: data/io.github.xchan14.larawan.metainfo.xml.in:7
+msgid "Slideshow widget"
+msgstr "Слайдшоу виджет"
+
+#: data/io.github.xchan14.larawan.metainfo.xml.in:13
+msgid "Make your desktop lively with a slideshow of your photos."
+msgstr "Оживите свой рабочий стол с помощью слайд-шоу из ваших фотографий."
+
+#: data/io.github.xchan14.larawan.metainfo.xml.in:15
+msgid "Christian Camilon"
+msgstr "Christian Camilon"
+
+#: data/io.github.xchan14.larawan.metainfo.xml.in:29
+msgid "App"
+msgstr "Приложение"
+
+#: data/io.github.xchan14.larawan.metainfo.xml.in:33
+#: src/views/MainWindow.vala:81
+msgid "Settings"
+msgstr "Параметры"
+
+#: data/io.github.xchan14.larawan.metainfo.xml.in:37
+msgid "Mid Transition"
+msgstr "Переход"
+
+#: data/io.github.xchan14.larawan.metainfo.xml.in:49
+msgid "Fixes screenshot not showing in AppCenter"
+msgstr "Исправлено отображение снимков в AppCenter"
+
+#: data/io.github.xchan14.larawan.metainfo.xml.in:50
+msgid "Increases default window size"
+msgstr "Увеличен размер окна по умолчанию"
+
+#: data/io.github.xchan14.larawan.metainfo.xml.in:57
+msgid "Initial Release"
+msgstr "Начальный выпуск"
+
 #: src/views/MainWindow.vala:44
 msgid "So Empty!"
 msgstr "Пусто!"
+
+#: src/views/MainWindow.vala:45
+msgid ""
+"Display album of your choice like your special someone or pets for example."
+msgstr "Выберите альбом, например, с вашим любимым человеком или вашими домашними животными."
 
 #: src/views/MainWindow.vala:50
 msgid "Select Album"
@@ -32,10 +82,6 @@ msgstr "Добавьте изображения из выбранной папк
 #: src/views/MainWindow.vala:54
 msgid "Loading Album..."
 msgstr "Загрузка альбома..."
-
-#: src/views/MainWindow.vala:81
-msgid "Settings"
-msgstr "Параметры"
 
 #: src/views/SettingsDialog.vala:36
 msgid "Slideshow"
