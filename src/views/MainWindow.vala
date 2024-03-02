@@ -63,7 +63,7 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
             child = main_content,
             propagate_natural_width = false,
             has_frame = false,
-            vscrollbar_policy = PolicyType.NEVER,
+            vscrollbar_policy = PolicyType.EXTERNAL,
             hscrollbar_policy = PolicyType.NEVER,
         };
         var viewport = (Viewport) scrolled_window.child;
