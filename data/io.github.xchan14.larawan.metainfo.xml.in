@@ -43,6 +43,21 @@
 
 
  <releases>
+    <release version="1.1.1" date="2024-03-03">
+      <description>
+        <ul>
+          <li>Fixes settings button not showing</li>
+        </ul>
+      </description>
+    </release>
+
+    <release version="1.1.0" date="2024-03-03">
+      <description>
+        <ul>
+          <li>Translation added for Russian</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.1" date="2024-02-27">
       <description>
         <ul>
