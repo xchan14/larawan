@@ -1,6 +1,6 @@
 /*
  * SPDX-License-Identifier: GPL-3.0-or-later
- * SPDX-FileCopyrightText: 2023 Your Name <chancamilon@proton.me>
+ * SPDX-FileCopyrightText: 2024 Christian Camilon <chancamilon@proton.me>
  */
 using Gtk;
 using Gdk;
