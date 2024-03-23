@@ -31,6 +31,7 @@ executable(
     'src' / 'Application.vala',
     'src' / 'Constants.vala',
     'src' / 'widgets' / 'EntryButton.vala',
+    'src' / 'widgets' / 'AlbumPicker.vala',
     'src' / 'views' / 'MainWindow.vala',
     'src' / 'views' / 'SettingsDialog.vala',
     'src' / 'models' / 'SlideshowImage.vala',

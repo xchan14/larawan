@@ -9,7 +9,12 @@ using Larawan.Widgets;
 
 public class Larawan.Views.SettingsDialog : Granite.Dialog {
 
-    EntryButton album_folder = null;
+    const double MAX_WINDOW_HEIGHT = 650;
+    const double MAX_WINDOW_WIDTH = 650;
+    const double MIN_WINDOW_HEIGHT = 300;
+    const double MIN_WINDOW_WIDTH = 300;
+
+    AlbumPicker album_picker = null;
     Switch shuffle_switch = null;
     GLib.Settings settings;
     FileDialog file_dialog;
@@ -61,11 +66,11 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
     }
 
     private void bind_events () {
-        album_folder.clicked.connect (() => {
+        album_picker.clicked.connect (() => {
             file_dialog.select_folder.begin (window, null, (obj, result) => {
                 try {
                     File file = file_dialog.select_folder.end (result);
-                    album_folder.text = file.get_path ();
+                    album_picker.value = file.get_path ();
                 } catch (Error e) {
                     info (e.message);
                 }
@@ -81,7 +86,7 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
 
     private void bind_settings () {
         settings = new GLib.Settings (APP_ID);
-        settings.bind ("album-folder", album_folder, "text", SettingsBindFlags.DEFAULT);
+        settings.bind ("album-folder", album_picker, "value", SettingsBindFlags.DEFAULT);
         settings.bind ("shuffle", shuffle_switch, "active", SettingsBindFlags.DEFAULT);
         settings.bind ("recursive", recursive_switch, "active", SettingsBindFlags.DEFAULT);
         settings.bind ("duration", duration_scale.adjustment, "value", SettingsBindFlags.DEFAULT);
@@ -95,9 +100,8 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
             width_request = 150,
             hexpand = false
         };
-        album_folder = new EntryButton.from_icon_name ("folder-open");
-        album_folder.readonly = true;
-        album_folder.hexpand = true;
+        album_picker = new AlbumPicker.from_icon_name ("folder-open");
+        album_picker.hexpand = true;
         string pictures_dir = Path.build_filename (Environment.get_home_dir (), "Pictures");
 
         file_dialog = new FileDialog () {
@@ -106,7 +110,7 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
 
         var album_folder_box = new Box (Orientation.HORIZONTAL, 10);
         album_folder_box.append (folder_label);
-        album_folder_box.append (album_folder);
+        album_folder_box.append (album_picker);
         root_box.append (album_folder_box);
     }
 
@@ -192,7 +196,12 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
             width_request = 150
         };
 
-        window_width_scale = new Scale.with_range (Orientation.HORIZONTAL, 300, 800, 1) {
+        window_width_scale = new Scale.with_range (
+            Orientation.HORIZONTAL, 
+            MIN_WINDOW_WIDTH, 
+            MAX_WINDOW_WIDTH, 
+            1
+        ) {
             digits = 0,
             draw_value = true,
             hexpand = true,
@@ -212,7 +221,12 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
             width_request = 150
         };
 
-        window_height_scale = new Scale.with_range (Orientation.HORIZONTAL, 300, 800, 1) {
+        window_height_scale = new Scale.with_range (
+            Orientation.HORIZONTAL, 
+            MIN_WINDOW_HEIGHT,
+            MAX_WINDOW_HEIGHT, 
+            1
+        ) {
             digits = 0,
             draw_value = true,
             hexpand = true,
