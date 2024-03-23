@@ -9,6 +9,9 @@ using Larawan.Views;
 using Larawan.Constants;
 
 public class Larawan.App : Gtk.Application {
+
+    private Xdp.Portal? portal = null;
+
     public App () {
         Object (
             application_id: APP_ID,
@@ -40,6 +43,12 @@ public class Larawan.App : Gtk.Application {
 
         apply_granite_theme ();
 
+        ask_for_background.begin ((obj, res) => {
+            if (!ask_for_background.end (res)) {
+                release ();
+            }
+        });
+
         // Create a new window
         info ("Starting Larawan...");
         var main_window = new MainWindow (this);
@@ -59,5 +68,30 @@ public class Larawan.App : Gtk.Application {
         granite_settings.notify["prefers-color-scheme"].connect (() => {
             gtk_settings.gtk_application_prefer_dark_theme = granite_settings.prefers_color_scheme == Granite.Settings.ColorScheme.DARK;
         });
+    }
+
+    public async bool ask_for_background () {
+        const string[] DAEMON_COMMAND = { "io.github.xchan14.larawan", "--background" };
+        if (portal == null) {
+            portal = new Xdp.Portal ();
+        }
+
+        string reason = _(
+            "Calendar will automatically start when this device turns on " +
+            "and run when its window is closed so that it can send event notifications."
+        );
+        var command = new GenericArray<unowned string> (2);
+        foreach (unowned var arg in DAEMON_COMMAND) {
+            command.add (arg);
+        }
+
+        var window = Xdp.parent_new_gtk (active_window);
+
+        try {
+            return yield portal.request_background (window, reason, command, AUTOSTART, null);
+        } catch (Error e) {
+            warning ("Error during portal request: %s", e.message);
+            return e is IOError.FAILED;
+        }
     }
 }
