@@ -7,7 +7,7 @@ using Granite;
 using Larawan.Constants;
 using Larawan.Widgets;
 
-public class Larawan.Views.SettingsDialog : Granite.Dialog {
+public class Larawan.Views.SettingsView : Box {
 
     const double MAX_WINDOW_HEIGHT = 650;
     const double MAX_WINDOW_WIDTH = 650;
@@ -23,26 +23,24 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
     Scale window_width_scale;
     Scale window_height_scale;
     LinkButton startup_linkbutton;
-    Box root_box;
 
     public ApplicationWindow window { get; construct set; }
 
-    public SettingsDialog (ApplicationWindow window) {
+    public SettingsView (ApplicationWindow window) {
         Object (window: window);
     }
 
     construct {
-        transient_for = window;
         set_size_request (700, 0);
-        add_css_class ("settings-dialog");
-        resizable = false;
-        root_box = new Box (Orientation.VERTICAL, 10);
+        add_css_class ("settings-view");
+        orientation = Orientation.VERTICAL;
+        spacing = 10;
 
         var slideshow_label = new Label (_("Slideshow")) {
             xalign = 0.0f
         };
         slideshow_label.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
-        root_box.append (slideshow_label);
+        append (slideshow_label);
         add_album_folder_field ();
         add_recursive_field ();
         add_duration_field ();
@@ -53,14 +51,12 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         window_label.add_css_class (Granite.STYLE_CLASS_H4_LABEL);
         window_label.add_css_class ("window-legend-label");
 
-        root_box.append (window_label);
+        append (window_label);
         add_startup_field ();
         add_always_visible_field ();
         add_width_field ();
         add_height_field ();
 
-        add_button (_("Close"), Gtk.ResponseType.CANCEL);
-        get_content_area ().append (root_box);
         bind_settings ();
         bind_events ();
     }
@@ -75,12 +71,6 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
                     info (e.message);
                 }
             });
-        });
-
-        response.connect ((response_id) => {
-            if (response_id == Gtk.ResponseType.CANCEL) {
-                hide ();
-            }
         });
     }
 
@@ -101,17 +91,17 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
             hexpand = false
         };
         album_picker = new AlbumPicker.from_icon_name ("folder-open");
-        album_picker.hexpand = true;
         string pictures_dir = Path.build_filename (Environment.get_home_dir (), "Pictures");
 
         file_dialog = new FileDialog () {
-            initial_folder = File.new_for_path (pictures_dir)
+            initial_folder = File.new_for_path (pictures_dir),
+            modal = true
         };
 
         var album_folder_box = new Box (Orientation.HORIZONTAL, 10);
         album_folder_box.append (folder_label);
         album_folder_box.append (album_picker);
-        root_box.append (album_folder_box);
+        append (album_folder_box);
     }
 
     private void add_recursive_field () {
@@ -138,7 +128,7 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
 
         box.append (control_box);
 
-        root_box.append (box);
+        append (box);
     }
 
     private void add_duration_field () {
@@ -161,7 +151,7 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         duration_box.append (duration_label);
         duration_box.append (duration_scale);
 
-        root_box.append (duration_box);
+        append (duration_box);
     }
 
     private void add_startup_field () {
@@ -186,7 +176,7 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         box.add_css_class ("form-field");
         box.append (label);
         box.append (value_box);
-        root_box.append (box);
+        append (box);
     }
 
     private void add_width_field () {
@@ -197,11 +187,11 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         };
 
         window_width_scale = new Scale.with_range (
-            Orientation.HORIZONTAL, 
-            MIN_WINDOW_WIDTH, 
-            MAX_WINDOW_WIDTH, 
+            Orientation.HORIZONTAL,
+            MIN_WINDOW_WIDTH,
+            MAX_WINDOW_WIDTH,
             1
-        ) {
+                             ) {
             digits = 0,
             draw_value = true,
             hexpand = true,
@@ -211,7 +201,7 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         box.add_css_class ("form-field");
         box.append (window_width_label);
         box.append (window_width_scale);
-        root_box.append (box);
+        append (box);
     }
 
     private void add_height_field () {
@@ -222,11 +212,11 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         };
 
         window_height_scale = new Scale.with_range (
-            Orientation.HORIZONTAL, 
+            Orientation.HORIZONTAL,
             MIN_WINDOW_HEIGHT,
-            MAX_WINDOW_HEIGHT, 
+            MAX_WINDOW_HEIGHT,
             1
-        ) {
+                              ) {
             digits = 0,
             draw_value = true,
             hexpand = true,
@@ -236,7 +226,7 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         box.add_css_class ("form-field");
         box.append (window_height_label);
         box.append (window_height_scale);
-        root_box.append (box);
+        append (box);
     }
 
     private void add_always_visible_field () {
@@ -254,6 +244,6 @@ public class Larawan.Views.SettingsDialog : Granite.Dialog {
         box.add_css_class ("form-field");
         box.append (label);
         box.append (always_visible_label);
-        root_box.append (box);
+        append (box);
     }
 }

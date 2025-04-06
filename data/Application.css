@@ -12,9 +12,8 @@
   box-shadow: none;
 }
 
-.settings-dialog {
-  padding-right: 16px;
-  padding-left: 16px;
+.settings-view {
+  padding: 16px 32px 16px 32px;
 }
 
 .form-field {

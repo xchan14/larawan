@@ -33,7 +33,7 @@ executable(
     'src' / 'widgets' / 'EntryButton.vala',
     'src' / 'widgets' / 'AlbumPicker.vala',
     'src' / 'views' / 'MainWindow.vala',
-    'src' / 'views' / 'SettingsDialog.vala',
+    'src' / 'views' / 'SettingsView.vala',
     'src' / 'models' / 'SlideshowImage.vala',
     'src' / 'models' / 'SlideshowPlaylist.vala',
     'src' / 'models' / 'FileHelper.vala',

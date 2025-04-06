@@ -16,11 +16,11 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
     uint resize_timeout_id = 0;
 
     Stack picture_stack;
-    SettingsDialog settings_dialog;
     GLib.Settings settings;
     WindowHandle window_handle;
     ScrolledWindow scrolled_window;
-    Button settings_button;
+    MenuButton settings_button;
+    Popover settings_popover;
     Stack main_content;
     Placeholder empty_dir_placeholder;
     Button empty_dir_placeholder_button;
@@ -74,17 +74,23 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
             child = scrolled_window,
         };
 
-        settings_button = new Button.from_icon_name ("open-menu") {
+        settings_button = new MenuButton () {
             halign = Align.END,
             valign = Align.END,
             can_focus = false,
             tooltip_text = _("Settings"),
             vexpand = true,
-            hexpand = true
+            hexpand = true,
+            icon_name = "open-menu",
         };
         settings_button.add_css_class ("settings-button");
-        settings_button.clicked.connect (on_settings_button_clicked);
         settings_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
+
+        settings_popover = new Popover () {
+            child = new SettingsView (this),
+            has_arrow = false,
+        };
+        settings_button.popover = settings_popover;
 
         var overlay = new Overlay () {
             child = window_handle,
@@ -121,13 +127,6 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
         if (key == "width" || key == "height") {
             resize_window ();
         }
-    }
-
-    private void on_settings_button_clicked () {
-        if (settings_dialog == null) {
-            settings_dialog = new SettingsDialog (this);
-        }
-        settings_dialog.show ();
     }
 
     private void on_empty_dir_placeholder_button_clicked () {
@@ -227,6 +226,6 @@ public class Larawan.Views.MainWindow : Adw.ApplicationWindow {
 
     void reload_image () {
         info ("Reloading image...");
-        slideshow_playlist.current ? .load_picture (width_request, height_request);
+        slideshow_playlist.current ?.load_picture (width_request, height_request);
     }
 }
