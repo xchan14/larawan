@@ -43,6 +43,14 @@
 
 
  <releases>
+     <release version="1.3.1" date="2025-04-08">
+      <description>
+        <ul>
+          <li>Other fixes</li>
+        </ul>
+      </description>
+    </release>
+    
     <release version="1.3.0" date="2025-04-07">
       <description>
         <ul>
