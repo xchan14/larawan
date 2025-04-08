@@ -22,10 +22,10 @@ Install the following depdencies.
 
 ## Running
 
-Use `./run-restart.sh` to build and start the app.
+Use `make restart` to build and start the app.
 
 ## Runtime
 
 io.elementary.Platform
 
-<p>Version: 7.3</p>
+<p>Version: 8.1</p>
